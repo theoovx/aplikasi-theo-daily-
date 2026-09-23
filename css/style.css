@@ -1,0 +1,2004 @@
+/* =========================================================
+   THEO DAILY
+   THEME SYSTEM
+   Paper / Mint / Sky / Sunset / Mono
+========================================================= */
+
+:root {
+  --bg: #f4efe6;
+  --surface: #fffdf8;
+  --surface-2: #eee8dc;
+
+  --text: #25231f;
+  --muted: #777168;
+
+  --accent: #c56b4e;
+  --accent-soft: #ead0c4;
+
+  --secondary: #71816c;
+
+  --border: #ddd4c5;
+  --shadow: rgba(70, 55, 40, 0.08);
+
+  --radius: 12px;
+}
+
+/* =========================================================
+   THEMES
+========================================================= */
+
+[data-theme="paper"] {
+  --bg: #f4efe6;
+  --surface: #fffdf8;
+  --surface-2: #eee8dc;
+  --text: #25231f;
+  --muted: #777168;
+  --accent: #c56b4e;
+  --accent-soft: #ead0c4;
+  --secondary: #71816c;
+  --border: #ddd4c5;
+  --shadow: rgba(70, 55, 40, 0.08);
+}
+
+[data-theme="mint"] {
+  --bg: #edf3ed;
+  --surface: #fbfdf9;
+  --surface-2: #e1ebe2;
+  --text: #202722;
+  --muted: #6f7871;
+  --accent: #4d8065;
+  --accent-soft: #cfe0d3;
+  --secondary: #7d927d;
+  --border: #d1ddd2;
+  --shadow: rgba(40, 70, 50, 0.08);
+}
+
+[data-theme="sky"] {
+  --bg: #edf4f8;
+  --surface: #fcfeff;
+  --surface-2: #e1edf4;
+  --text: #202b33;
+  --muted: #6c7880;
+  --accent: #4c7895;
+  --accent-soft: #cfdfeb;
+  --secondary: #7896a7;
+  --border: #d1dfe7;
+  --shadow: rgba(40, 70, 90, 0.08);
+}
+
+[data-theme="sunset"] {
+  --bg: #f5eee5;
+  --surface: #fffaf4;
+  --surface-2: #eee0d0;
+  --text: #30241e;
+  --muted: #7e6c60;
+  --accent: #d47b35;
+  --accent-soft: #efd2b5;
+  --secondary: #96705a;
+  --border: #e1d1bf;
+  --shadow: rgba(80, 50, 30, 0.08);
+}
+
+[data-theme="mono"] {
+  --bg: #eeeeec;
+  --surface: #fafafa;
+  --surface-2: #dfdfdc;
+  --text: #171717;
+  --muted: #6b6b6b;
+  --accent: #222222;
+  --accent-soft: #d2d2d2;
+  --secondary: #777777;
+  --border: #cfcfcd;
+  --shadow: rgba(0, 0, 0, 0.07);
+}
+
+/* =========================================================
+   RESET
+========================================================= */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+
+  background: var(--bg);
+  color: var(--text);
+
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+
+  transition:
+    background 0.25s ease,
+    color 0.25s ease;
+}
+
+/* =========================================================
+   APP
+========================================================= */
+
+.app {
+  width: 100%;
+  max-width: 620px;
+  min-height: 100vh;
+  margin: 0 auto;
+
+  background: var(--bg);
+
+  padding-bottom: 88px;
+
+  transition: background 0.25s ease;
+}
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.top-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 30px 22px 20px;
+
+  border-bottom: 1px solid var(--border);
+}
+
+.greeting {
+  margin-bottom: 5px;
+
+  color: var(--muted);
+
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.top-header h1 {
+  font-size: 32px;
+  font-weight: 750;
+  letter-spacing: -1.2px;
+}
+
+.profile {
+  width: 42px;
+  height: 42px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid var(--border);
+  border-radius: 50%;
+
+  background: var(--surface);
+
+  color: var(--accent);
+
+  font-size: 12px;
+  font-weight: 750;
+
+  box-shadow: 0 4px 14px var(--shadow);
+}
+
+/* =========================================================
+   CONTENT
+========================================================= */
+
+.content {
+  padding: 0 18px;
+}
+
+.date-section {
+  padding: 18px 4px 10px;
+}
+
+.date-section p {
+  color: var(--muted);
+
+  font-size: 13px;
+  font-weight: 500;
+}
+
+/* =========================================================
+   GENERAL CARD
+========================================================= */
+
+.card {
+  margin-top: 12px;
+  padding: 18px;
+
+  background: var(--surface);
+
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+
+  box-shadow: 0 5px 18px var(--shadow);
+
+  transition:
+    background 0.25s ease,
+    border 0.25s ease,
+    transform 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-1px);
+}
+
+.card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 15px;
+}
+
+.label {
+  color: var(--muted);
+
+  font-size: 10px;
+  font-weight: 750;
+
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+}
+
+.card h2 {
+  margin-top: 5px;
+
+  font-size: 17px;
+  font-weight: 700;
+
+  letter-spacing: -0.2px;
+}
+
+/* =========================================================
+   NEXT REMINDER
+========================================================= */
+
+.next-reminder {
+  border-left: 4px solid var(--accent);
+}
+
+.reminder-icon {
+  width: 38px;
+  height: 38px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: var(--accent-soft);
+
+  border-radius: 9px;
+
+  font-size: 17px;
+}
+
+.reminder-time {
+  margin-top: 15px;
+
+  color: var(--accent);
+
+  font-size: 42px;
+  font-weight: 750;
+
+  line-height: 1;
+  letter-spacing: -2px;
+}
+
+/* =========================================================
+   PROGRESS
+========================================================= */
+
+#progressPercent {
+  color: var(--accent);
+
+  font-size: 15px;
+  font-weight: 750;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 7px;
+
+  margin-top: 17px;
+
+  overflow: hidden;
+
+  background: var(--surface-2);
+
+  border-radius: 99px;
+}
+
+#progressFill {
+  width: 0%;
+  height: 100%;
+
+  background: var(--accent);
+
+  border-radius: inherit;
+
+  transition: width 0.35s ease;
+}
+
+/* =========================================================
+   SECTIONS
+========================================================= */
+
+.section {
+  margin-top: 27px;
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 11px;
+  padding: 0 3px;
+}
+
+.section-title h2 {
+  font-size: 17px;
+  font-weight: 750;
+
+  letter-spacing: -0.3px;
+}
+
+.section-title > span {
+  color: var(--muted);
+
+  font-size: 20px;
+}
+
+/* =========================================================
+   SUGGESTION
+========================================================= */
+
+.suggestion-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+
+  padding: 16px;
+
+  background: var(--surface);
+
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+
+  box-shadow: 0 5px 18px var(--shadow);
+}
+
+.suggestion-icon {
+  width: 42px;
+  height: 42px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: var(--accent-soft);
+
+  border-radius: 10px;
+
+  color: var(--accent);
+
+  font-size: 18px;
+}
+
+.suggestion-content {
+  min-width: 0;
+}
+
+.suggestion-content h3 {
+  margin-top: 4px;
+
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.suggestion-content p:last-child {
+  margin-top: 3px;
+
+  color: var(--muted);
+
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+/* =========================================================
+   TASK LIST
+========================================================= */
+
+.task-list {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.empty-state {
+  padding: 28px 15px;
+
+  text-align: center;
+
+  background: var(--surface);
+
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+}
+
+.empty-state > div {
+  width: 38px;
+  height: 38px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin: 0 auto 10px;
+
+  border-radius: 50%;
+
+  background: var(--accent-soft);
+
+  color: var(--accent);
+
+  font-weight: 800;
+}
+
+.empty-state p {
+  font-size: 14px;
+  font-weight: 650;
+}
+
+.empty-state span {
+  display: block;
+
+  margin-top: 4px;
+
+  color: var(--muted);
+
+  font-size: 12px;
+}
+
+/* =========================================================
+   MINIMUM DAY
+========================================================= */
+
+.minimum-day {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 15px;
+
+  margin-top: 28px;
+
+  background: var(--surface-2);
+  border-color: transparent;
+
+  box-shadow: none;
+}
+
+.minimum-day h2 {
+  font-size: 16px;
+}
+
+.minimum-day p:last-child {
+  max-width: 260px;
+
+  margin-top: 5px;
+
+  color: var(--muted);
+
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+#minimumDayButton {
+  flex-shrink: 0;
+
+  padding: 10px 15px;
+
+  border: 0;
+  border-radius: 8px;
+
+  background: var(--accent);
+  color: #fff;
+
+  font-size: 12px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.15s ease,
+    opacity 0.15s ease;
+}
+
+#minimumDayButton:active {
+  transform: scale(0.95);
+}
+
+#minimumDayButton:hover {
+  opacity: 0.88;
+}
+
+/* =========================================================
+   BOTTOM NAV
+========================================================= */
+
+.bottom-nav {
+  position: fixed;
+
+  left: 50%;
+  bottom: 0;
+
+  width: 100%;
+  max-width: 620px;
+
+  transform: translateX(-50%);
+
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+
+  padding: 8px 8px calc(8px + env(safe-area-inset-bottom));
+
+  background: color-mix(
+    in srgb,
+    var(--surface) 94%,
+    transparent
+  );
+
+  border-top: 1px solid var(--border);
+
+  box-shadow: 0 -5px 20px var(--shadow);
+
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+
+  z-index: 100;
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  gap: 3px;
+
+  min-height: 52px;
+
+  border: 0;
+  background: transparent;
+
+  color: var(--muted);
+
+  cursor: pointer;
+
+  transition:
+    color 0.2s ease,
+    transform 0.15s ease;
+}
+
+.nav-item span {
+  font-size: 18px;
+  line-height: 1;
+}
+
+.nav-item small {
+  font-size: 10px;
+  font-weight: 650;
+}
+
+.nav-item.active {
+  color: var(--accent);
+}
+
+.nav-item:active {
+  transform: scale(0.92);
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 380px) {
+
+  .top-header {
+    padding-left: 17px;
+    padding-right: 17px;
+  }
+
+  .content {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  .top-header h1 {
+    font-size: 29px;
+  }
+
+  .reminder-time {
+    font-size: 38px;
+  }
+
+  .minimum-day {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  #minimumDayButton {
+    width: 100%;
+  }
+}
+
+/* =========================================================
+   REDUCE MOTION
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition: none !important;
+  }
+}
+/* =========================================================
+   10. PAGE SYSTEM
+========================================================= */
+
+.page {
+  animation: pageFade 0.2s ease;
+}
+
+.page[hidden] {
+  display: none !important;
+}
+
+@keyframes pageFade {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+/* =========================================================
+   11. SCHEDULE
+========================================================= */
+
+.schedule-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.form-group label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  min-height: 46px;
+  padding: 0 13px;
+
+  border: 1px solid var(--border);
+  border-radius: 14px;
+
+  background: var(--surface);
+  color: var(--text);
+
+  font: inherit;
+  font-size: 14px;
+
+  outline: none;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.primary-button {
+  width: 100%;
+  min-height: 46px;
+
+  border: 0;
+  border-radius: 14px;
+
+  background: var(--accent);
+  color: white;
+
+  font: inherit;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.15s ease,
+    opacity 0.15s ease;
+}
+
+.primary-button:active {
+  transform: scale(0.98);
+}
+
+.primary-button:hover {
+  opacity: 0.9;
+}
+
+
+/* Schedule list */
+
+.schedule-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.schedule-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  padding: 13px;
+
+  border: 1px solid var(--border);
+  border-radius: 16px;
+
+  background: var(--surface);
+
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
+}
+
+.schedule-item:hover {
+  transform: translateY(-1px);
+}
+
+.schedule-item .task-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.schedule-item .task-info strong {
+  display: block;
+
+  font-size: 14px;
+  font-weight: 700;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.schedule-item .task-info small {
+  display: block;
+  margin-top: 3px;
+
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.schedule-check {
+  flex-shrink: 0;
+}
+
+.schedule-delete {
+  width: 34px;
+  height: 34px;
+
+  border: 0;
+  border-radius: 10px;
+
+  background: var(--surface-soft);
+  color: var(--muted);
+
+  font-size: 21px;
+  line-height: 1;
+
+  cursor: pointer;
+}
+
+.schedule-delete:hover {
+  background: var(--danger-soft);
+  color: var(--danger);
+}
+
+
+/* =========================================================
+   12. TASK ITEM
+========================================================= */
+
+.task-item {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  padding: 13px;
+
+  border: 1px solid var(--border);
+  border-radius: 16px;
+
+  background: var(--surface);
+  color: var(--text);
+
+  text-align: left;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.15s ease,
+    background 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.task-item:hover {
+  transform: translateY(-1px);
+}
+
+.task-item:active {
+  transform: scale(0.99);
+}
+
+.task-check {
+  width: 26px;
+  height: 26px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 2px solid var(--border-strong);
+  border-radius: 50%;
+
+  background: transparent;
+  color: white;
+
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.task-item.completed {
+  opacity: 0.58;
+}
+
+.task-item.completed .task-check {
+  border-color: var(--accent);
+  background: var(--accent);
+}
+
+.task-item.completed .task-info strong {
+  text-decoration: line-through;
+}
+
+.task-info {
+  min-width: 0;
+}
+
+.task-info strong {
+  display: block;
+
+  font-size: 14px;
+  font-weight: 700;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.task-info small {
+  display: block;
+  margin-top: 3px;
+
+  color: var(--muted);
+  font-size: 12px;
+}
+
+
+/* =========================================================
+   13. PROGRESS
+========================================================= */
+
+.progress-big {
+  padding: 24px;
+
+  border: 1px solid var(--border);
+  border-radius: 22px;
+
+  background: var(--surface);
+
+  text-align: center;
+}
+
+.progress-big-percent {
+  font-size: 46px;
+  line-height: 1;
+
+  font-weight: 800;
+  letter-spacing: -2px;
+}
+
+.progress-big-label {
+  margin-top: 8px;
+
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.progress-big .progress-bar {
+  margin-top: 20px;
+  height: 10px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.stat-card {
+  padding: 18px;
+
+  border: 1px solid var(--border);
+  border-radius: 18px;
+
+  background: var(--surface);
+}
+
+.stat-card span {
+  display: block;
+
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.stat-card strong {
+  display: block;
+  margin-top: 6px;
+
+  font-size: 26px;
+  line-height: 1;
+}
+
+.muted-text {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+
+/* =========================================================
+   14. MONEY
+========================================================= */
+
+.money-balance {
+  padding: 24px;
+
+  border-radius: 22px;
+
+  background: var(--accent);
+  color: white;
+}
+
+.money-balance-label {
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+.money-balance-value {
+  margin-top: 8px;
+
+  font-size: 34px;
+  line-height: 1;
+
+  font-weight: 800;
+  letter-spacing: -1px;
+}
+
+.money-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.money-action {
+  min-height: 52px;
+
+  border: 1px solid var(--border);
+  border-radius: 16px;
+
+  background: var(--surface);
+  color: var(--text);
+
+  font: inherit;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.15s ease,
+    background 0.2s ease;
+}
+
+.money-action:hover {
+  transform: translateY(-1px);
+}
+
+.money-action:active {
+  transform: scale(0.98);
+}
+
+
+/* =========================================================
+   15. MOBILE
+========================================================= */
+
+@media (max-width: 520px) {
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .progress-big-percent {
+    font-size: 40px;
+  }
+
+  .money-balance-value {
+    font-size: 30px;
+  }
+
+}
+
+
+/* =========================================================
+   THEME SWITCHER
+========================================================= */
+
+.theme-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.theme-button {
+  min-height: 46px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.theme-button.active {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+
+/* =========================================================
+   HABITS
+========================================================= */
+
+.habit-page {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* =========================================================
+   FOCUS
+========================================================= */
+
+.energy-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.energy-button {
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--card);
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+}
+
+.energy-button.active {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+
+/* =========================================================
+   THEO DAILY - COMPONENT POLISH
+========================================================= */
+
+.daily-overview {
+  margin-bottom: 18px;
+}
+
+.overview-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.overview-item {
+  padding: 14px 10px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  text-align: center;
+  background: var(--card);
+}
+
+.overview-item strong {
+  display: block;
+  font-size: 20px;
+}
+
+.overview-item span {
+  display: block;
+  margin-top: 4px;
+  font-size: 12px;
+  opacity: .7;
+}
+
+.timer-card {
+  text-align: center;
+}
+
+.timer-display {
+  font-size: 54px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  margin: 20px 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.timer-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+}
+
+.timer-controls button {
+  flex: 1;
+  min-width: 90px;
+}
+
+#timerDuration {
+  width: 100%;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--text);
+  font: inherit;
+}
+
+textarea {
+  width: 100%;
+  resize: vertical;
+  box-sizing: border-box;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--text);
+  font: inherit;
+}
+
+.goal-card {
+  margin-bottom: 10px;
+}
+
+.goal-progress {
+  width: 100%;
+  accent-color: var(--accent);
+}
+
+.holiday-card {
+  margin-top: 14px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 24px 14px;
+  opacity: .75;
+}
+
+@media (max-width: 480px) {
+
+  .overview-grid {
+    gap: 7px;
+  }
+
+  .overview-item {
+    padding: 12px 6px;
+  }
+
+  .overview-item strong {
+    font-size: 18px;
+  }
+
+  .timer-display {
+    font-size: 44px;
+  }
+
+}
+
+
+/* FIX: BOTTOM NAV TOUCH AREA */
+.bottom-nav {
+  position: fixed !important;
+  left: 50% !important;
+  bottom: 0 !important;
+  z-index: 99999 !important;
+  pointer-events: auto !important;
+}
+
+.page {
+  padding-bottom: 100px !important;
+}
+
+
+/* =========================================================
+   THEO DAILY - UI POLISH V1
+========================================================= */
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  padding-bottom: 90px;
+}
+
+/* PAGE */
+.page {
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+/* CONTENT */
+.content {
+  width: min(100%, 620px);
+  margin: 0 auto;
+  padding: 20px 16px 110px;
+  box-sizing: border-box;
+}
+
+/* HEADERS */
+.top-header {
+  width: min(100%, 620px);
+  margin: 0 auto;
+  padding: 24px 16px 8px;
+  box-sizing: border-box;
+}
+
+.top-header h1 {
+  margin: 4px 0 0;
+  font-size: 28px;
+  line-height: 1.15;
+  letter-spacing: -0.5px;
+}
+
+.greeting {
+  margin: 0;
+  font-size: 13px;
+  opacity: .62;
+}
+
+/* CARDS */
+.card {
+  border-radius: 20px;
+  padding: 18px;
+  margin-bottom: 14px;
+  box-sizing: border-box;
+}
+
+.card h2 {
+  margin: 0 0 8px;
+  font-size: 17px;
+  line-height: 1.3;
+}
+
+.card p {
+  margin: 0 0 14px;
+  line-height: 1.55;
+}
+
+/* BUTTONS */
+button {
+  min-height: 44px;
+  font: inherit;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.primary-button,
+.secondary-button {
+  width: 100%;
+  border-radius: 14px;
+  padding: 12px 16px;
+}
+
+.primary-button {
+  font-weight: 600;
+}
+
+.secondary-button {
+  font-weight: 500;
+}
+
+/* FORM ELEMENTS */
+input,
+select,
+textarea {
+  min-height: 44px;
+  box-sizing: border-box;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="time"],
+select {
+  width: 100%;
+  border-radius: 13px;
+  padding: 10px 12px;
+}
+
+/* TASK / HABIT ITEMS */
+.task-item {
+  width: 100%;
+  min-height: 58px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 12px;
+  margin-bottom: 8px;
+  border-radius: 16px;
+  box-sizing: border-box;
+  text-align: left;
+}
+
+.task-check {
+  width: 28px;
+  height: 28px;
+  min-width: 28px;
+  display: grid;
+  place-items: center;
+  border-radius: 9px;
+}
+
+.task-info {
+  min-width: 0;
+  flex: 1;
+}
+
+.task-info strong {
+  display: block;
+  font-size: 14px;
+  line-height: 1.3;
+}
+
+.task-info small {
+  display: block;
+  margin-top: 3px;
+  font-size: 12px;
+  opacity: .62;
+}
+
+/* BOTTOM NAV */
+.bottom-nav {
+  width: min(100%, 620px);
+  box-sizing: border-box;
+  padding: 8px 8px calc(8px + env(safe-area-inset-bottom));
+  border-radius: 20px 20px 0 0;
+}
+
+.nav-item {
+  min-height: 54px;
+  border-radius: 14px;
+  padding: 6px 4px;
+}
+
+.nav-item span {
+  font-size: 11px;
+}
+
+/* MOBILE */
+@media (max-width: 480px) {
+  .content {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  .top-header {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  .top-header h1 {
+    font-size: 26px;
+  }
+
+  .card {
+    padding: 16px;
+    border-radius: 18px;
+  }
+}
+
+/* =========================================================
+   THEO DAILY - HOME POLISH
+========================================================= */
+
+#homePage .content {
+  padding-top: 12px;
+}
+
+/* TODAY OVERVIEW */
+#dailyOverview {
+  padding: 20px;
+  border-radius: 22px;
+}
+
+#dailyOverview .section-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+
+#dailyOverview .section-title h2 {
+  margin: 0;
+  font-size: 20px;
+}
+
+#todayDate {
+  font-size: 12px;
+  opacity: .6;
+}
+
+/* OVERVIEW STATS */
+.overview-grid {
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.overview-item {
+  min-height: 74px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-radius: 16px;
+  padding: 12px 8px;
+  box-sizing: border-box;
+}
+
+.overview-item strong {
+  font-size: 19px;
+  line-height: 1.2;
+}
+
+.overview-item span {
+  margin-top: 5px;
+  font-size: 11px;
+}
+
+/* HOME SECTIONS */
+#homePage .card {
+  margin-bottom: 12px;
+}
+
+#homePage .section-title {
+  margin-bottom: 12px;
+}
+
+/* NEXT TASK */
+.next-task,
+.next-reminder {
+  border-radius: 18px;
+  padding: 16px;
+}
+
+/* QUICK ACTIONS */
+.quick-actions {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 9px;
+}
+
+.quick-actions button {
+  min-height: 52px;
+  border-radius: 15px;
+}
+
+/* HOME TASK LIST */
+#homePage .task-list {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+/* EMPTY STATES */
+.empty-state {
+  border-radius: 16px;
+  padding: 28px 16px;
+}
+
+.empty-state div {
+  font-size: 24px;
+  margin-bottom: 7px;
+}
+
+.empty-state p {
+  margin: 0 0 4px;
+  font-weight: 600;
+}
+
+.empty-state span {
+  font-size: 12px;
+  opacity: .6;
+}
+
+/* MOBILE */
+@media (max-width: 480px) {
+  #dailyOverview {
+    padding: 17px;
+  }
+
+  .overview-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .quick-actions {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* =========================================================
+   THEO DAILY - HOME HIERARCHY V2
+========================================================= */
+
+#homePage .content {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* Remove inconsistent card spacing inside Home */
+#homePage .content > .card {
+  margin: 0;
+}
+
+/* TODAY HERO */
+#dailyOverview {
+  padding: 22px;
+  border-radius: 24px;
+}
+
+#dailyOverview .section-title {
+  margin: 0;
+}
+
+#dailyOverview .section-title h2 {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.4px;
+}
+
+#todayDate {
+  font-size: 12px;
+  font-weight: 500;
+  opacity: .55;
+}
+
+/* STATS */
+#dailyOverview .overview-grid {
+  margin-top: 18px;
+  gap: 8px;
+}
+
+#dailyOverview .overview-item {
+  min-height: 72px;
+  padding: 12px 7px;
+  border-radius: 16px;
+  border: 0;
+}
+
+#dailyOverview .overview-item strong {
+  font-size: 19px;
+  font-weight: 700;
+}
+
+#dailyOverview .overview-item span {
+  margin-top: 4px;
+  font-size: 11px;
+  opacity: .55;
+}
+
+/* SECTION HEADINGS */
+#homePage .section-title h2 {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 650;
+}
+
+#homePage .section-title span {
+  font-size: 12px;
+  opacity: .55;
+}
+
+/* NEXT / FOCUS CARD */
+#homePage .next-task,
+#homePage .next-reminder {
+  padding: 18px;
+  border-radius: 20px;
+}
+
+#homePage .next-task strong,
+#homePage .next-reminder strong {
+  font-size: 16px;
+}
+
+/* TASK LIST */
+#homePage .task-list {
+  gap: 7px;
+}
+
+#homePage .task-item {
+  margin: 0;
+  border-radius: 16px;
+  min-height: 56px;
+}
+
+/* COMPLETED TASK */
+#homePage .task-item.completed {
+  opacity: .55;
+}
+
+#homePage .task-item.completed strong {
+  text-decoration: line-through;
+}
+
+/* QUICK ACTIONS */
+#homePage .quick-actions {
+  gap: 8px;
+}
+
+#homePage .quick-actions button {
+  min-height: 50px;
+  border-radius: 15px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* MOBILE */
+@media (max-width: 480px) {
+
+  #homePage .content {
+    padding-top: 8px;
+    gap: 12px;
+  }
+
+  #dailyOverview {
+    padding: 18px;
+    border-radius: 21px;
+  }
+
+  #dailyOverview .section-title h2 {
+    font-size: 20px;
+  }
+
+}
+
+/* =========================================================
+   THEO DAILY - SCHEDULE POLISH
+========================================================= */
+
+#schedulePage .content {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+#schedulePage .content > .card {
+  margin: 0;
+}
+
+/* ADD TASK CARD */
+#schedulePage form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+#schedulePage form input,
+#schedulePage form select,
+#schedulePage form button {
+  width: 100%;
+}
+
+/* SCHEDULE LIST */
+#schedulePage .task-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+#schedulePage .task-item {
+  min-height: 62px;
+  margin: 0;
+  padding: 12px 14px;
+  border-radius: 17px;
+}
+
+#schedulePage .task-check {
+  width: 30px;
+  height: 30px;
+  min-width: 30px;
+  border-radius: 10px;
+}
+
+#schedulePage .task-info {
+  overflow: hidden;
+}
+
+#schedulePage .task-info strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+#schedulePage .task-info small {
+  margin-top: 4px;
+}
+
+/* TIME LABEL */
+#schedulePage .task-time {
+  flex-shrink: 0;
+  font-size: 12px;
+  font-weight: 600;
+  opacity: .65;
+}
+
+/* SECTION TITLES */
+#schedulePage .section-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+#schedulePage .section-title h2 {
+  margin: 0;
+  font-size: 18px;
+}
+
+/* MOBILE */
+@media (max-width: 480px) {
+  #schedulePage .content {
+    gap: 12px;
+  }
+
+  #schedulePage .task-item {
+    min-height: 58px;
+  }
+}
+
+/* =========================================================
+   THEO DAILY - HABITS POLISH
+========================================================= */
+
+#habitPage .content {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+#habitPage .content > .card {
+  margin: 0;
+}
+
+/* ADD HABIT */
+#habitPage form {
+  display: flex;
+  gap: 8px;
+}
+
+#habitPage form input {
+  flex: 1;
+  min-width: 0;
+}
+
+#habitPage form button {
+  flex-shrink: 0;
+  width: auto;
+  padding-left: 18px;
+  padding-right: 18px;
+}
+
+/* HABIT LIST */
+#habitList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+#habitList .task-item {
+  min-height: 64px;
+  margin: 0;
+  border-radius: 17px;
+  padding: 12px 14px;
+}
+
+#habitList .task-check {
+  width: 30px;
+  height: 30px;
+  min-width: 30px;
+  border-radius: 10px;
+}
+
+#habitList .task-info strong {
+  font-size: 14px;
+}
+
+#habitList .task-info small {
+  margin-top: 4px;
+  font-size: 11px;
+}
+
+/* COMPLETED */
+#habitList .task-item.completed {
+  opacity: .58;
+}
+
+#habitList .task-item.completed strong {
+  text-decoration: line-through;
+}
+
+/* COUNT */
+#habitCount {
+  font-size: 12px;
+  opacity: .55;
+}
+
+/* MOBILE */
+@media (max-width: 480px) {
+  #habitPage form {
+    gap: 6px;
+  }
+
+  #habitPage form button {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+}
+
+/* =========================================================
+   THEO DAILY - GOALS POLISH
+========================================================= */
+
+#goalsPage .content {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+#goalsPage .content > .card {
+  margin: 0;
+}
+
+/* ADD GOAL */
+#goalsPage form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+#goalsPage form input,
+#goalsPage form button {
+  width: 100%;
+}
+
+/* GOAL LIST */
+#goalList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+#goalList .goal-card {
+  margin: 0;
+  padding: 17px;
+  border-radius: 19px;
+}
+
+#goalList .goal-card > strong {
+  display: block;
+  font-size: 15px;
+  line-height: 1.4;
+}
+
+/* PROGRESS */
+#goalList .goal-progress {
+  display: block;
+  width: 100%;
+  height: 7px;
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+#goalList .goal-card small {
+  font-size: 11px;
+  opacity: .58;
+}
+
+/* COUNT */
+#goalCount {
+  font-size: 12px;
+  opacity: .55;
+}
+
+/* MOBILE */
+@media (max-width: 480px) {
+  #goalList .goal-card {
+    padding: 15px;
+  }
+}

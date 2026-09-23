@@ -1,0 +1,1250 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#c96f4a">
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <meta
+    name="theme-color"
+    content="#f4efe6"
+  >
+
+  <title>THEO DAILY APP</title>
+
+  <link
+    rel="stylesheet"
+    href="css/style.css"
+  >
+
+</head>
+
+
+<body>
+
+  <div class="app">
+
+
+    <!-- =====================================================
+         HOME
+    ====================================================== -->
+
+    <section
+      class="page active-page"
+      id="homePage"
+    >
+
+      <!-- HEADER -->
+
+      <header class="top-header">
+
+        <div>
+
+          <p class="greeting">
+            Good morning, Theo.
+          </p>
+
+          <h1>
+            Today
+          </h1>
+
+        </div>
+
+
+        <div class="profile">
+          <span>TR</span>
+        </div>
+
+      </header>
+
+
+      <main class="content">
+
+    <section class="card daily-overview" id="dailyOverview">
+
+      <div class="section-title">
+        <h2>Today</h2>
+        <span id="todayDate">--</span>
+      </div>
+
+      <div class="overview-grid">
+
+        <div class="overview-item">
+          <strong id="overviewTasks">0/0</strong>
+          <span>Tasks</span>
+        </div>
+
+        <div class="overview-item">
+          <strong id="overviewHabits">0</strong>
+          <span>Habits</span>
+        </div>
+
+        <div class="overview-item">
+          <strong id="overviewGoals">0%</strong>
+          <span>Goals</span>
+        </div>
+
+      </div>
+
+    </section>
+
+
+
+
+        <!-- DATE -->
+
+        <section class="date-section">
+
+          <p id="currentDate">
+            Monday, 21 September 2026
+          </p>
+
+        </section>
+
+
+        <!-- NEXT REMINDER -->
+
+        <section class="card next-reminder">
+
+          <div class="card-header">
+
+            <div>
+
+              <p class="label">
+                NEXT REMINDER
+              </p>
+
+              <h2 id="nextReminder">
+                No upcoming reminder
+              </h2>
+
+            </div>
+
+
+            <div class="reminder-icon">
+              ⏰
+            </div>
+
+          </div>
+
+
+          <div class="reminder-time">
+
+            <span id="nextReminderTime">
+              --:--
+            </span>
+
+          </div>
+
+        </section>
+
+
+        <!-- PROGRESS -->
+
+        <section class="card">
+
+          <div class="card-header">
+
+            <div>
+
+              <p class="label">
+                TODAY'S PROGRESS
+              </p>
+
+              <h2>
+
+                <span id="completedCount">
+                  0
+                </span>
+
+                /
+
+                <span id="totalCount">
+                  0
+                </span>
+
+                completed
+
+              </h2>
+
+            </div>
+
+
+            <span id="progressPercent">
+              0%
+            </span>
+
+          </div>
+
+
+          <div class="progress-bar">
+
+            <div
+              id="progressFill"
+            ></div>
+
+          </div>
+
+        </section>
+
+
+        <!-- SUGGESTION -->
+
+        <section class="section">
+
+          <div class="section-title">
+
+            <h2>
+              What should I do now?
+            </h2>
+
+            <span>
+              ›
+            </span>
+
+          </div>
+
+
+          <div class="suggestion-card">
+
+            <div class="suggestion-icon">
+              ⚡
+            </div>
+
+
+            <div class="suggestion-content">
+
+              <p class="label">
+                SUGGESTION
+              </p>
+
+              <h3 id="suggestionTitle">
+                Start your day
+              </h3>
+
+              <p id="suggestionDescription">
+                Pick one small thing and get moving.
+              </p>
+
+            </div>
+
+          </div>
+
+        </section>
+
+
+        <!-- TODAY TASKS -->
+
+        <section class="section">
+
+          <div class="section-title">
+
+            <h2>
+              Today's tasks
+            </h2>
+
+            <span id="taskCount">
+              0
+            </span>
+
+          </div>
+
+
+          <div
+            id="taskList"
+            class="task-list"
+          >
+
+            <div class="empty-state">
+
+              <div>
+                ✓
+              </div>
+
+              <p>
+                No tasks for today.
+              </p>
+
+              <span>
+                Add something to your schedule.
+              </span>
+
+            </div>
+
+          </div>
+
+        </section>
+
+
+        <!-- MINIMUM DAY -->
+
+        <section class="card minimum-day">
+
+          <div>
+
+            <p class="label">
+              MINIMUM DAY
+            </p>
+
+            <h2>
+              Keep the day alive.
+            </h2>
+
+            <p>
+              Do one useful thing, even on low-energy days.
+            </p>
+
+          </div>
+
+
+          <button
+            id="minimumDayButton"
+            class="minimum-day-trigger"
+            type="button"
+          >
+            Start
+          </button>
+
+        </section>
+
+
+      </main>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         SCHEDULE
+    ====================================================== -->
+
+    <section
+      class="page"
+      id="schedulePage"
+      hidden
+    >
+
+      <header class="top-header">
+
+        <div>
+
+          <p class="greeting">
+            Plan your day.
+          </p>
+
+          <h1>
+            Schedule
+          </h1>
+
+        </div>
+
+
+        <button
+          class="profile"
+          id="addScheduleTop"
+          type="button"
+        >
+          +
+        </button>
+
+      </header>
+
+
+      <main class="content">
+
+
+        <section class="date-section">
+
+          <p id="scheduleDate">
+            Monday, 21 September 2026
+          </p>
+
+        </section>
+
+
+        <!-- ADD SCHEDULE -->
+
+        <section class="card">
+
+          <p class="label">
+            NEW ACTIVITY
+          </p>
+
+          <h2>
+            Add something to your day
+          </h2>
+
+
+          <form
+            id="scheduleForm"
+            class="schedule-form"
+          >
+
+            <input
+              id="scheduleTitle"
+              type="text"
+              placeholder="Activity name"
+              autocomplete="off"
+              required
+            >
+
+
+            <div class="form-row">
+
+              <input
+                id="scheduleTime"
+                type="time"
+                required
+              >
+
+
+              <select
+                id="scheduleRepeat"
+              >
+
+                <option value="daily">
+                  Every day
+                </option>
+
+                <option value="once">
+                  Today only
+                </option>
+
+              </select>
+
+            </div>
+
+
+            <button
+              type="submit"
+              class="primary-button"
+            >
+              Add Schedule
+            </button>
+
+          </form>
+
+        </section>
+
+
+        <!-- SCHEDULE LIST -->
+
+        <section class="section">
+
+          <div class="section-title">
+
+            <h2>
+              Today's schedule
+            </h2>
+
+            <span id="scheduleCount">
+              0
+            </span>
+
+          </div>
+
+
+          <div
+            id="scheduleList"
+            class="task-list"
+          ></div>
+
+        </section>
+
+
+      </main>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         PROGRESS
+    ====================================================== -->
+
+    <section
+      class="page"
+      id="progressPage"
+      hidden
+    >
+
+      <header class="top-header">
+
+        <div>
+
+          <p class="greeting">
+            Keep moving.
+          </p>
+
+          <h1>
+            Progress
+          </h1>
+
+        </div>
+
+
+        <div class="profile">
+          <span>↗</span>
+        </div>
+
+      </header>
+
+
+      <main class="content">
+
+
+        <section class="date-section">
+
+          <p>
+            Your consistency
+          </p>
+
+        </section>
+
+
+        <!-- BIG PROGRESS -->
+
+        <section class="card">
+
+          <p class="label">
+            TODAY
+          </p>
+
+
+          <div class="progress-big">
+
+            <strong id="progressBigPercent">
+              0%
+            </strong>
+
+            <span>
+              completed
+            </span>
+
+          </div>
+
+
+          <div class="progress-bar">
+
+            <div
+              id="progressBigFill"
+            ></div>
+
+          </div>
+
+        </section>
+
+
+        <!-- STATISTICS -->
+
+        <section class="section">
+
+          <div class="section-title">
+
+            <h2>
+              Statistics
+            </h2>
+
+          </div>
+
+
+          <div class="stats-grid">
+
+
+            <div class="card stat-card">
+
+              <span class="label">
+                COMPLETED
+              </span>
+
+              <strong id="statCompleted">
+                0
+              </strong>
+
+            </div>
+
+
+            <div class="card stat-card">
+
+              <span class="label">
+                TOTAL
+              </span>
+
+              <strong id="statTotal">
+                0
+              </strong>
+
+            </div>
+
+
+          </div>
+
+        </section>
+
+
+        <!-- WEEKLY -->
+
+        <section class="card">
+
+          <p class="label">
+            THIS WEEK
+          </p>
+
+          <h2>
+            Consistency
+          </h2>
+
+          <p class="muted-text">
+            Your weekly statistics will appear here.
+          </p>
+
+        </section>
+
+
+      </main>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         MONEY
+    ====================================================== -->
+
+    <section
+      class="page"
+      id="moneyPage"
+      hidden
+    >
+
+      <header class="top-header">
+
+        <div>
+
+          <p class="greeting">
+            Keep track of it.
+          </p>
+
+          <h1>
+            Money
+          </h1>
+
+        </div>
+
+
+        <div class="profile">
+          <span>Rp</span>
+        </div>
+
+      </header>
+
+
+      <main class="content">
+
+
+        <section class="date-section">
+
+          <p>
+            Personal finance
+          </p>
+
+        </section>
+
+
+        <!-- BALANCE -->
+
+        <section class="card money-balance">
+
+          <p class="label">
+            BALANCE
+          </p>
+
+          <h2 id="moneyBalance">
+            Rp0
+          </h2>
+
+        </section>
+
+
+        <!-- MONEY ACTIONS -->
+
+        <section class="section">
+
+          <div class="section-title">
+
+            <h2>
+              Quick actions
+            </h2>
+
+          </div>
+
+
+          <div class="money-actions">
+
+            <button
+              type="button"
+              class="money-action"
+              id="addIncome"
+            >
+
+              <span>
+                +
+              </span>
+
+              Income
+
+            </button>
+
+
+            <button
+              type="button"
+              class="money-action"
+              id="addExpense"
+            >
+
+              <span>
+                −
+              </span>
+
+              Expense
+
+            </button>
+
+          </div>
+
+        </section>
+
+
+        <!-- TRANSACTIONS -->
+
+        <section class="section">
+
+          <div class="section-title">
+
+            <h2>
+              Recent activity
+            </h2>
+
+          </div>
+
+
+          <div id="moneyTransactionList" class="task-list">
+
+            <div class="empty-state">
+
+              <div>
+                Rp
+              </div>
+
+              <p>
+                No transactions yet.
+              </p>
+
+              <span>
+                Your money activity will appear here.
+              </span>
+
+            </div>
+
+          </div>
+
+        </section>
+
+
+      </main>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         BOTTOM NAVIGATION
+    ====================================================== -->
+
+    
+<section class="page" id="goalsPage" hidden>
+  <header class="top-header">
+    <div>
+      <p class="greeting">Keep moving.</p>
+      <h1>Goals</h1>
+    </div>
+  </header>
+
+  <main class="content">
+
+    <section class="card">
+      <form id="goalForm" class="schedule-form">
+
+        <div class="form-group">
+          <label for="goalTitle">New goal</label>
+
+          <input
+            id="goalTitle"
+            type="text"
+            placeholder="Contoh: Belajar Arduino"
+            maxlength="80"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="goalProgress">Progress (%)</label>
+
+          <input
+            id="goalProgress"
+            type="number"
+            min="0"
+            max="100"
+            value="0"
+            required
+          >
+        </div>
+
+        <button class="primary-button" type="submit">
+          Add Goal
+        </button>
+
+      </form>
+    </section>
+
+    <section class="section">
+
+      <div class="section-title">
+        <h2>My goals</h2>
+        <span id="goalCount">0</span>
+      </div>
+
+      <div id="goalList" class="task-list"></div>
+
+    </section>
+
+  </main>
+</section>
+
+
+<section class="page" id="focusPage" hidden>
+
+      <section class="card holiday-card" id="holidayMode">
+        <div class="section-title">
+          <h2>Holiday Mode</h2>
+          <span id="holidayStatus">OFF</span>
+        </div>
+
+        <p>
+          Mode santai dengan target kecil supaya hari libur nggak
+          habis cuma buat rebahan.
+        </p>
+
+        <button
+          class="primary-button"
+          id="holidayToggle"
+          type="button"
+        >
+          Turn On
+        </button>
+      </section>
+
+
+  <header class="top-header">
+    <div>
+      <p class="greeting">Do something useful.</p>
+      <h1>Focus</h1>
+    </div>
+  </header>
+
+  <main class="content">
+
+    <section class="card">
+      <h2>What should I do now?</h2>
+
+      <p id="focusSuggestion">
+        Press the button and let THEO DAILY choose.
+      </p>
+
+      <button
+        class="primary-button"
+        id="suggestActivityButton"
+        type="button"
+      >
+        Choose activity
+      </button>
+    </section>
+
+    <section class="section">
+      <div class="section-title">
+        <h2>Energy</h2>
+      </div>
+
+      <div class="energy-grid">
+
+        <button class="energy-button" data-energy="low" type="button">
+          Low
+        </button>
+
+        <button class="energy-button" data-energy="normal" type="button">
+          Normal
+        </button>
+
+        <button class="energy-button" data-energy="high" type="button">
+          High
+        </button>
+
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Minimum Day</h2>
+
+      <p>
+        Kalau hari ini lagi berantakan, cukup selesaikan
+        beberapa hal dasar.
+      </p>
+
+      <button
+        class="primary-button minimum-day-trigger"
+        id="minimumDayButtonFocus"
+        type="button"
+      >
+        Start Minimum Day
+      </button>
+    </section>
+
+  </main>
+</section>
+
+
+<section class="page" id="backupPage" hidden>
+  <header class="top-header">
+    <div>
+      <p class="greeting">Keep your data safe.</p>
+      <h1>Backup</h1>
+    </div>
+  </header>
+
+  <main class="content">
+
+    <section class="card">
+      <h2>Backup data</h2>
+
+      <p>
+        Simpan semua data THEO DAILY ke file JSON.
+      </p>
+
+      <button
+        class="primary-button"
+        id="exportDataButton"
+        type="button"
+      >
+        Export Data
+      </button>
+    </section>
+
+    <section class="card">
+      <h2>Restore data</h2>
+
+      <p>
+        Masukkan kembali file backup JSON.
+      </p>
+
+      <input
+        id="importDataInput"
+        type="file"
+        accept=".json,application/json"
+      >
+
+
+
+    </section>
+
+  </main>
+</section>
+
+
+<section class="page" id="reviewPage" hidden>
+  <header class="top-header">
+    <div>
+      <p class="greeting">Check your day.</p>
+      <h1>Daily Review</h1>
+    </div>
+  </header>
+
+  <main class="content">
+
+    <section class="card">
+      <h2>Today's progress</h2>
+      <p id="reviewProgress">
+        Loading...
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>How was today?</h2>
+
+      <div class="energy-grid">
+        <button class="review-mood" data-mood="bad" type="button">😕</button>
+        <button class="review-mood" data-mood="okay" type="button">😐</button>
+        <button class="review-mood" data-mood="good" type="button">🙂</button>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Note</h2>
+
+      <textarea
+        id="reviewNote"
+        rows="5"
+        placeholder="Tulis sedikit tentang hari ini..."
+      ></textarea>
+
+      <button
+        class="primary-button"
+        id="saveReviewButton"
+        type="button"
+      >
+        Save Review
+      </button>
+    </section>
+
+  </main>
+</section>
+
+
+<section class="page" id="timerPage" hidden>
+  <header class="top-header">
+    <div>
+      <p class="greeting">One thing at a time.</p>
+      <h1>Focus Timer</h1>
+    </div>
+  </header>
+
+  <main class="content">
+
+    <section class="card timer-card">
+
+      <div id="timerDisplay" class="timer-display">
+        25:00
+      </div>
+
+      <div class="timer-controls">
+
+        <button
+          class="primary-button"
+          id="timerStart"
+          type="button"
+        >
+          Start
+        </button>
+
+        <button
+          class="secondary-button"
+          id="timerPause"
+          type="button"
+        >
+          Pause
+        </button>
+
+        <button
+          class="secondary-button"
+          id="timerReset"
+          type="button"
+        >
+          Reset
+        </button>
+
+      </div>
+
+    </section>
+
+    <section class="card">
+
+      <h2>Session</h2>
+
+      <select id="timerDuration">
+        <option value="15">15 minutes</option>
+        <option value="25" selected>25 minutes</option>
+        <option value="45">45 minutes</option>
+        <option value="60">60 minutes</option>
+      </select>
+
+    </section>
+
+  </main>
+</section>
+
+<nav class="bottom-nav">
+
+
+      <button
+        class="nav-item active"
+        data-page="home"
+        type="button"
+      >
+
+        <span>
+          ⌂
+        </span>
+
+        <small>
+          Home
+        </small>
+
+      </button>
+
+
+      <button
+        class="nav-item"
+        data-page="schedule"
+        type="button"
+      >
+
+        <span>
+          ◷
+        </span>
+
+        <small>
+          Schedule
+        </small>
+
+      </button>
+
+
+      <button
+        class="nav-item"
+        data-page="progress"
+        type="button"
+      >
+
+        <span>
+          ▣
+        </span>
+
+        <small>
+          Progress
+        </small>
+
+      </button>
+
+
+      <button
+        class="nav-item"
+        data-page="money"
+        type="button"
+      >
+
+        <span>
+          Rp
+        </span>
+
+        <small>
+          Money
+        </small>
+
+      </button>
+
+
+    
+      <button class="nav-item" data-page="habits" type="button">
+        <span>Habits</span>
+      </button>
+
+      <button class="nav-item" data-page="goals" type="button">
+        <span>Goals</span>
+      </button>
+
+      <button class="nav-item" data-page="focus" type="button">
+        <span>Focus</span>
+      </button>
+
+      <button class="nav-item" data-page="backup" type="button">
+        <span>Backup</span>
+      </button>
+
+      <button class="nav-item" data-page="review" type="button">
+        <span>Review</span>
+      </button>
+
+      <button class="nav-item" data-page="timer" type="button">
+        <span>Timer</span>
+      </button>
+</nav>
+
+
+  
+<section class="page" id="habitsPage" hidden>
+  <header class="top-header">
+    <div>
+      <p class="greeting">Build consistency.</p>
+      <h1>Habits</h1>
+    </div>
+  </header>
+
+  <main class="content">
+
+    <section class="card">
+      <form id="habitForm" class="schedule-form">
+
+        <div class="form-group">
+          <label for="habitTitle">New habit</label>
+
+          <input
+            id="habitTitle"
+            type="text"
+            placeholder="Contoh: Minum air"
+            maxlength="60"
+            required
+          >
+        </div>
+
+        <button
+          class="primary-button"
+          type="submit"
+        >
+          Add Habit
+        </button>
+
+      </form>
+    </section>
+
+    <section class="section">
+
+      <div class="section-title">
+        <h2>Today's habits</h2>
+        <span id="habitCount">0</span>
+      </div>
+
+      <div
+        id="habitList"
+        class="task-list"
+      ></div>
+
+    </section>
+
+  </main>
+</section>
+
+</div>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
+<script>eruda.init();</script>
+<script src="js/app.js"></script>
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./sw.js")
+      .then(() => console.log("THEO DAILY service worker ready"))
+      .catch(error => console.error("Service worker error:", error));
+  });
+}
+</script>
+
+</body>
+
+</html>

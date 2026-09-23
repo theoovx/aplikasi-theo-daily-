@@ -1,0 +1,10 @@
+{
+  "name": "THEO DAILY",
+  "short_name": "THEO DAILY",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f7f1e8",
+  "theme_color": "#c96f4a",
+  "description": "Personal daily companion by Theo",
+  "icons": []
+}
