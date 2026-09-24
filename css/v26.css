@@ -1,0 +1,15 @@
+/* === THEO v2.6 PATCH: crop foto, freeze streak, pengingat backup === */
+.crop-ov { position: fixed; inset: 0; z-index: 100000; display: flex; align-items: center; justify-content: center; padding: env(safe-area-inset-top) 16px env(safe-area-inset-bottom); background: rgba(0, 0, 0, .85); }
+.crop-box { display: flex; flex-direction: column; align-items: center; gap: 14px; width: 100%; max-width: 340px; padding: 20px; border-radius: 24px; background: var(--card, #111827); border: 1px solid var(--border); }
+.crop-box canvas { width: 280px; max-width: 100%; aspect-ratio: 1; border-radius: 50%; touch-action: none; background: #000; box-shadow: 0 0 0 3px var(--accent); }
+.crop-box input { width: 100%; }
+.crop-box small { color: var(--muted); }
+.crop-btns { display: flex; gap: 10px; }
+.bk { margin: 12px 0; padding: 12px 16px; border-top: 0; }
+.bk small { display: block; color: var(--muted); font-size: 12px; }
+.cfg-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 0; border-top: 1px solid var(--border); }
+.cfg-row > div:first-child { min-width: 0; }
+.cfg-row b { display: block; font-size: 14px; }
+.cfg-row small { color: var(--muted); font-size: 12px; line-height: 1.35; }
+.cfg-btns { display: flex; gap: 6px; flex-shrink: 0; }
+.cfg-btns .on, .crop-btns .on { border-color: var(--accent); color: var(--accent); }

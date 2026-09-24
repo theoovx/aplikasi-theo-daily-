@@ -1,0 +1,19 @@
+/* === THEO v2.5 PATCH: Today bisa diatur + rapikan Focus === */
+.t-hide { display: none !important; }
+.cfg-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 0; border-top: 1px solid var(--border); }
+.cfg-row > div:first-child { min-width: 0; }
+.cfg-row b { display: block; font-size: 14px; }
+.cfg-row small { color: var(--muted); font-size: 12px; line-height: 1.35; }
+.cfg-btns { display: flex; gap: 6px; flex-shrink: 0; }
+.cfg-btns .mini-button { min-width: 36px; padding: 6px 10px; }
+.cfg-btns .on { border-color: var(--accent); color: var(--accent); }
+.cfg-btns button:disabled { opacity: .3; }
+#focusPage .timer-controls { display: grid !important; grid-template-columns: 1.4fr 1fr 1fr; gap: 10px; margin: 16px 0 !important; }
+#focusPage .timer-controls button { min-height: 48px; margin: 0 !important; border-radius: 14px !important; }
+#focusPage .secondary-button { background: rgba(255, 255, 255, .06) !important; border: 1px solid var(--border) !important; color: inherit !important; }
+#focusPage .energy-grid { display: grid !important; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 14px 0 12px !important; }
+#focusPage .energy-grid + .primary-button, #focusPage .holiday-card .primary-button { display: block; width: 100%; margin-top: 12px !important; }
+#focusSuggestion { margin: 8px 0 0 !important; }
+#focusPage .holiday-card .section-title { padding: 0 !important; margin: 0 0 8px !important; }
+#focusPage .holiday-card h2 { margin: 0 !important; }
+#focusPage .holiday-card p { margin: 0 !important; }
