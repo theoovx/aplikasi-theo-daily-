@@ -2255,6 +2255,9 @@ function init() {
   setupSettings();
   setupAvatar();
 
+  const versionEl = document.getElementById("appVersion");
+  if (versionEl) versionEl.textContent = "2.1 (20260924c)";
+
   refreshApp();
 
   startLive();
