@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html data-uiux-version="stealth-final-v1" lang="id">
+<html lang="id">
 
 <head>
   <link rel="manifest" href="manifest.json">
@@ -21,14 +21,8 @@
 
   <link
     rel="stylesheet"
-    href="css/style.css?v=99999"
+    href="css/style.css"
   >
-
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Sharp:opsz,wght,FILL,GRAD@20..48,500,0,0" rel="stylesheet">
 
 </head>
 
@@ -1106,86 +1100,106 @@
   </main>
 </section>
 
-
-<section class="page" id="widgetsPage" data-page-section="widgets" hidden>
-  <div class="page-header">
-    <div>
-      <span class="eyebrow">TOOLS</span>
-      <h1>Widgets</h1>
-      <p>Quick access to your daily tools.</p>
-    </div>
-  </div>
-
-  <div class="widgets-grid">
-    <button class="widget-card" data-page="habits" type="button">
-      <span class="material-symbols-sharp">check_circle</span>
-      <strong>Habits</strong>
-      <small>Track your routines</small>
-    </button>
-
-    <button class="widget-card" data-page="goals" type="button">
-      <span class="material-symbols-sharp">flag</span>
-      <strong>Goals</strong>
-      <small>Keep your targets visible</small>
-    </button>
-
-    <button class="widget-card" data-page="grooming" type="button">
-      <span class="material-symbols-sharp">face</span>
-      <strong>Grooming</strong>
-      <small>Personal care routine</small>
-    </button>
-
-    <button class="widget-card" data-page="focus" type="button">
-      <span class="material-symbols-sharp">center_focus_strong</span>
-      <strong>Focus Mode</strong>
-      <small>Cut the distractions</small>
-    </button>
-
-    <button class="widget-card" data-page="timer" type="button">
-      <span class="material-symbols-sharp">timer</span>
-      <strong>Timer</strong>
-      <small>Simple countdown</small>
-    </button>
-
-    <button class="widget-card" data-page="review" type="button">
-      <span class="material-symbols-sharp">rate_review</span>
-      <strong>Review</strong>
-      <small>Reflect on your day</small>
-    </button>
-
-    <button class="widget-card" data-page="backup" type="button">
-      <span class="material-symbols-sharp">backup</span>
-      <strong>Backup</strong>
-      <small>Protect your data</small>
-    </button>
-  </div>
-</section>
-
 <nav class="bottom-nav">
-  <button class="nav-item active" data-page="home" type="button">
-    <span class="material-symbols-sharp">home</span>
-    <span>Today</span>
-  </button>
 
-  <button class="nav-item" data-page="schedule" type="button">
-    <span class="material-symbols-sharp">calendar_month</span>
-    <span>Schedule</span>
-  </button>
 
-  <button class="nav-item" data-page="progress" type="button">
-    <span class="material-symbols-sharp">monitoring</span>
-    <span>Progress</span>
-  </button>
+      <button
+        class="nav-item active"
+        data-page="home"
+        type="button"
+      >
 
-  <button class="nav-item" data-page="money" type="button">
-    <span class="material-symbols-sharp">account_balance_wallet</span>
-    <span>Money</span>
-  </button>
+        <span>
+          ⌂
+        </span>
 
-  <button class="nav-item" data-page="widgets" type="button">
-    <span class="material-symbols-sharp">widgets</span>
-    <span>Widgets</span>
-  </button>
+        <small>
+          Home
+        </small>
+
+      </button>
+
+
+      <button
+        class="nav-item"
+        data-page="schedule"
+        type="button"
+      >
+
+        <span>
+          ◷
+        </span>
+
+        <small>
+          Schedule
+        </small>
+
+      </button>
+
+
+      <button
+        class="nav-item"
+        data-page="progress"
+        type="button"
+      >
+
+        <span>
+          ▣
+        </span>
+
+        <small>
+          Progress
+        </small>
+
+      </button>
+
+
+      <button
+        class="nav-item"
+        data-page="money"
+        type="button"
+      >
+
+        <span>
+          Rp
+        </span>
+
+        <small>
+          Money
+        </small>
+
+      </button>
+
+
+      <button class="nav-item" data-page="grooming" type="button">
+        <span>Grooming</span>
+      </button>
+
+
+    
+      <button class="nav-item" data-page="habits" type="button">
+        <span>Habits</span>
+      </button>
+
+      <button class="nav-item" data-page="goals" type="button">
+        <span>Goals</span>
+      </button>
+
+      <button class="nav-item" data-page="focus" type="button">
+        <span>Focus</span>
+      </button>
+
+      <button class="nav-item" data-page="backup" type="button">
+        <span>Backup</span>
+      </button>
+
+      <button class="nav-item" data-page="review" type="button">
+        <span>Review</span>
+      </button>
+
+      <button class="nav-item" data-page="timer" type="button">
+        <span>Timer</span>
+      </button>
 </nav>
 
 

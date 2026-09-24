@@ -2058,7 +2058,7 @@ function updateDailyOverview() {
 ========================================================= */
 
 function setupNavigation() {
-  const navItems = document.querySelectorAll(".nav-item");
+  const navItems = document.querySelectorAll(".nav-item, .widget-card[data-page]");
 
   navItems.forEach(item => {
     item.addEventListener("click", () => {
@@ -2264,3 +2264,77 @@ document.addEventListener(
   "DOMContentLoaded",
   init
 );
+
+
+    
+/* === THEO WIDGET NAV === */
+document.querySelectorAll(".widget-card[data-page]").forEach(card => {
+  card.addEventListener("click", () => {
+    const page = card.dataset.page;
+    const target = document.getElementById(`${page}Page`);
+
+    if (!target) {
+      console.error("Widget page tidak ditemukan:", `${page}Page`);
+      return;
+    }
+
+    document.querySelectorAll(".page").forEach(section => {
+      section.hidden = true;
+    });
+
+    target.hidden = false;
+
+    card.classList.add("widget-card-pressed");
+    setTimeout(() => card.classList.remove("widget-card-pressed"), 160);
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+
+    if (page === "schedule") renderSchedule();
+    if (page === "progress") updateProgressPage();
+    if (page === "habits") renderHabits();
+    if (page === "goals") renderGoals();
+    if (page === "money") renderMoney();
+    if (page === "grooming") renderGrooming();
+    if (page === "focus") suggestActivity();
+    if (page === "review") setupReview();
+    if (page === "timer") updateTimerDisplay();
+  });
+});
+
+
+
+/* === THEO WIDGET NAV FINAL === */
+document.addEventListener("DOMContentLoaded", () => {
+  document.querySelectorAll(".widget-card[data-page]").forEach(card => {
+    card.addEventListener("click", () => {
+      const page = card.dataset.page;
+      const target = document.getElementById(page + "Page");
+
+      if (!target) {
+        console.error("Widget page tidak ditemukan:", page + "Page");
+        return;
+      }
+
+      document.querySelectorAll(".page").forEach(section => {
+        section.hidden = true;
+      });
+
+      target.hidden = false;
+
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+
+      if (page === "habits" && typeof renderHabits === "function") renderHabits();
+      if (page === "goals" && typeof renderGoals === "function") renderGoals();
+      if (page === "grooming" && typeof renderGrooming === "function") renderGrooming();
+      if (page === "focus" && typeof suggestActivity === "function") suggestActivity();
+      if (page === "timer" && typeof updateTimerDisplay === "function") updateTimerDisplay();
+      if (page === "review" && typeof setupReview === "function") setupReview();
+    });
+  });
+});
