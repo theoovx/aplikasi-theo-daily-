@@ -580,62 +580,49 @@ function updateNextReminder() {
    SUGGESTION
 ========================================================= */
 
-function updateSuggestion() {
+function hashText(text) {
+  return [...text].reduce((a, c) => (a * 31 + c.charCodeAt(0)) >>> 0, 7);
+}
 
-  const title =
-    document.getElementById(
-      "suggestionTitle"
-    );
-
-  const description =
-    document.getElementById(
-      "suggestionDescription"
-    );
-
-  if (!title || !description) {
-    return;
+let homeIdeaCache = { key: "", text: "" };
+function homeIdea() {
+  const key = getLocalDateKey() + "-" + new Date().getHours();
+  if (homeIdeaCache.key !== key) {
+    homeIdeaCache = {
+      key,
+      text: pickNext("home", [...focusActivities.low, ...focusActivities.normal, ...timeIdeas[dayPart()]])
+    };
   }
+  return homeIdeaCache.text;
+}
 
-  const tasks =
-    getTodayTasks();
+function updateSuggestion() {
+  const title = document.getElementById("suggestionTitle");
+  const description = document.getElementById("suggestionDescription");
+  if (!title || !description) return;
 
-  const incomplete =
-    tasks.filter(
-      task => !task.completed
-    );
+  const tasks = getTodayTasks();
+  const incomplete = tasks.filter(task => !task.completed);
 
   if (tasks.length === 0) {
-
-    title.textContent =
-      "Start your day";
-
-    description.textContent =
-      "Add one small thing to your schedule.";
-
+    title.textContent = "Hari masih kosong";
+    description.textContent = homeIdea();
     return;
   }
 
   if (incomplete.length === 0) {
-
-    title.textContent =
-      "Day completed";
-
-    description.textContent =
-      "You finished everything planned for today.";
-
+    title.textContent = "Semua beres";
+    description.textContent = `Santai dulu. Ide: ${homeIdea()}`;
     return;
   }
 
-  const next =
-    incomplete[0];
-
-  title.textContent =
-    next.title;
-
+  const next = incomplete[0];
+  title.textContent = next.title;
   description.textContent =
-    `${next.time} • One thing at a time.`;
-
+    `${next.time} • ${nudges[hashText(getLocalDateKey() + next.id) % nudges.length]}`;
 }
+
+
 
 
 /* =========================================================
@@ -1230,44 +1217,122 @@ function setupGoalForm() {
 
 const focusActivities = {
   low: [
-    "Rapikan tempat tidur.",
-    "Mandi dan ganti pakaian.",
-    "Minum air.",
-    "Rapikan meja selama 5 menit.",
-    "Bereskan file atau foto yang tidak diperlukan."
+    "Minum segelas air dulu.",
+    "Rapikan tempat tidur, 2 menit aja.",
+    "Mandi air hangat, ganti baju bersih.",
+    "Buka jendela, cari udara segar 5 menit.",
+    "Cuci piring atau gelas yang numpuk.",
+    "Rapikan meja, cukup satu sisi.",
+    "Hapus 10 foto atau file yang nggak kepakai.",
+    "Duduk santai, dengerin satu lagu sampai habis.",
+    "Jalan kaki sebentar keliling rumah atau depan gang.",
+    "Charge HP dan siapkan barang buat besok.",
+    "Peregangan leher dan bahu, 3 menit.",
+    "Bales satu chat yang dari kemarin ketunda."
   ],
 
   normal: [
-    "Kerjakan satu tugas dari Schedule.",
-    "Belajar skill selama 20 menit.",
-    "Rapikan kamar.",
-    "Kerjakan sedikit project THEO DAILY.",
-    "Baca kembali catatan yang sudah dibuat."
+    "Kerjakan satu task dari Schedule, yang paling ringan dulu.",
+    "Belajar satu topik baru selama 20 menit, pakai timer.",
+    "Tulis 3 hal yang mau kamu selesaikan hari ini.",
+    "Kerjakan project THEO DAILY, satu fitur kecil aja.",
+    "Baca ulang catatan kemarin, tandai yang belum selesai.",
+    "Bersihkan satu sudut kamar sampai rapi.",
+    "Coba satu resep atau menu simpel yang belum pernah dibuat.",
+    "Rapikan folder Download, buang yang sudah nggak dipakai.",
+    "Latihan skill 25 menit, lalu istirahat 5 menit.",
+    "Catat pengeluaran hari ini di tab Money.",
+    "Chat orang yang udah lama nggak ngobrol.",
+    "Cari satu tutorial pendek dan langsung praktikkan."
   ],
 
   high: [
-    "Kerjakan project selama 30 menit.",
-    "Belajar materi baru.",
-    "Latihan coding.",
-    "Kerjakan tugas yang paling sulit dulu.",
-    "Buat satu improvement untuk project."
+    "Kerjakan project 45 menit tanpa buka medsos.",
+    "Ambil tugas yang paling kamu hindari, mulai 15 menit dulu.",
+    "Latihan coding: bikin satu fitur kecil dari nol.",
+    "Baca satu bab materi, lalu tulis ringkasannya sendiri.",
+    "Perbaiki satu bug yang udah lama kamu biarkan.",
+    "Susun rencana minggu ini: 3 target, masing-masing ada langkah pertama.",
+    "Kerjakan dua sesi fokus 25 menit berturut-turut.",
+    "Bikin satu improvement di project, lalu commit.",
+    "Olahraga 20 menit, habis itu langsung kerjakan tugas berat.",
+    "Review Goals dan naikkan progress yang sudah jalan.",
+    "Belajar hal baru yang agak di luar zona nyaman.",
+    "Selesaikan satu hal yang tertunda lebih dari seminggu."
   ]
 };
 
+const timeIdeas = {
+  pagi: [
+    "Sarapan dulu sebelum mulai apa-apa.",
+    "Jemur badan 5 menit di dekat jendela.",
+    "Tentukan satu prioritas hari ini.",
+    "Cek jadwal hari ini, geser yang nggak realistis."
+  ],
+  siang: [
+    "Istirahat makan, jauh dari layar sebentar.",
+    "Minum air, jam segini biasanya udah kurang cairan.",
+    "Cek task, sisa berapa yang masih bisa dikejar.",
+    "Rebahan 10 menit boleh, pasang alarm."
+  ],
+  sore: [
+    "Jalan sore sebentar, cari udara segar.",
+    "Beresin yang belum kelar sebelum malam.",
+    "Mandi sore biar badan segar lagi.",
+    "Siapkan baju dan barang buat besok."
+  ],
+  malam: [
+    "Isi Review hari ini, singkat aja.",
+    "Taruh HP jauh dari kasur 30 menit sebelum tidur.",
+    "Tulis satu hal yang berjalan baik hari ini.",
+    "Rapikan meja dan cek jadwal besok."
+  ]
+};
+
+const nudges = [
+  "Satu hal dulu.",
+  "Mulai 5 menit aja.",
+  "Nggak perlu sempurna.",
+  "Pelan-pelan, yang penting jalan.",
+  "Habis ini boleh istirahat.",
+  "Kamu bisa."
+];
+
 let currentEnergy = "normal";
 
-function suggestActivity() {
-  const list = focusActivities[currentEnergy];
+function dayPart(now = new Date()) {
+  const h = now.getHours();
+  return h < 11 ? "pagi" : h < 15 ? "siang" : h < 18 ? "sore" : "malam";
+}
 
-  const activity =
-    list[Math.floor(Math.random() * list.length)];
-
-  const output =
-    document.getElementById("focusSuggestion");
-
-  if (output) {
-    output.textContent = activity;
+// Kocok sekali, habiskan semua sebelum ngulang, dan tidak pernah kembar berurutan.
+const suggestBags = {};
+function pickNext(key, list) {
+  let bag = suggestBags[key];
+  if (!bag || !bag.items.length) {
+    const items = list.map((_, i) => i);
+    for (let i = items.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [items[i], items[j]] = [items[j], items[i]];
+    }
+    if (bag && items.length > 1 && items[items.length - 1] === bag.last) {
+      items.unshift(items.pop());
+    }
+    bag = suggestBags[key] = { items, last: bag ? bag.last : -1 };
   }
+  bag.last = bag.items.pop();
+  return list[bag.last];
+}
+
+function suggestActivity() {
+  const part = dayPart();
+  const text = Math.random() < 0.35
+    ? pickNext("time-" + part, timeIdeas[part])
+    : pickNext(currentEnergy, focusActivities[currentEnergy]);
+
+  const output = document.getElementById("focusSuggestion");
+  if (output) output.textContent = text;
+  return text;
 }
 
 function startMinimumDay() {
@@ -2188,6 +2253,7 @@ function init() {
 
   setupMinimumDay();
   setupSettings();
+  setupAvatar();
 
   refreshApp();
 
@@ -2296,8 +2362,8 @@ function updateGreeting(now = new Date()) {
   const name = data.settings.name || "Theo";
   const el = document.getElementById("homeGreeting");
   if (el) el.textContent = `${g}, ${name}.`;
-  const p = document.getElementById("profileButton");
-  if (p) p.textContent = name.trim().slice(0, 2).toUpperCase();
+  paintAvatar(document.getElementById("profileButton"));
+  paintAvatar(document.getElementById("avatarPreview"));
 }
 
 function liveRefresh() {
@@ -2560,4 +2626,61 @@ function setupSettings() {
       renderTemplateButtons();
     }
   });
+}
+
+/* ---------- foto profil ---------- */
+
+function paintAvatar(el) {
+  if (!el) return;
+  const photo = data.settings.avatar;
+  el.classList.toggle("has-photo", !!photo);
+  if (photo) {
+    el.style.setProperty("background-image", `url("${photo}")`, "important");
+    el.textContent = "";
+  } else {
+    el.style.removeProperty("background-image");
+    el.textContent = (data.settings.name || "Theo").trim().slice(0, 2).toUpperCase();
+  }
+}
+
+function setupAvatar() {
+  const input = document.getElementById("avatarInput");
+  const remove = document.getElementById("avatarRemove");
+
+  if (input) {
+    input.addEventListener("change", () => {
+      const file = input.files[0];
+      if (!file) return;
+
+      const url = URL.createObjectURL(file);
+      const img = new Image();
+
+      img.onload = () => {
+        const side = Math.min(img.width, img.height);
+        const canvas = document.createElement("canvas");
+        canvas.width = canvas.height = 256;
+        canvas.getContext("2d").drawImage(
+          img, (img.width - side) / 2, (img.height - side) / 2, side, side, 0, 0, 256, 256
+        );
+        URL.revokeObjectURL(url);
+        data.settings.avatar = canvas.toDataURL("image/jpeg", 0.85);
+        saveData();
+        input.value = "";
+      };
+
+      img.onerror = () => {
+        URL.revokeObjectURL(url);
+        alert("Foto tidak bisa dibaca. Coba foto lain.");
+      };
+
+      img.src = url;
+    });
+  }
+
+  if (remove) {
+    remove.addEventListener("click", () => {
+      delete data.settings.avatar;
+      saveData();
+    });
+  }
 }

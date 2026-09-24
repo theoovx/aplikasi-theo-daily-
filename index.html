@@ -17,7 +17,7 @@
 
   <link
     rel="stylesheet"
-    href="css/style.css?v=20260924"
+    href="css/style.css?v=20260924b"
   >
 
 
@@ -1166,6 +1166,14 @@
 
     <section class="card">
       <h2>Profil</h2>
+      <div class="avatar-row">
+        <div class="avatar-preview" id="avatarPreview"></div>
+        <div class="avatar-actions">
+          <label class="mini-button" for="avatarInput">Pilih foto</label>
+          <input id="avatarInput" type="file" accept="image/*" hidden>
+          <button class="mini-button" id="avatarRemove" type="button">Hapus</button>
+        </div>
+      </div>
       <div class="form-group">
         <label for="settingsName">Nama panggilan</label>
         <input id="settingsName" type="text" maxlength="24" autocomplete="off">

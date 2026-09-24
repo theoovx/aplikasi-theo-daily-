@@ -4205,3 +4205,18 @@ button:focus-visible, input:focus-visible, select:focus-visible {
 @media (prefers-reduced-motion: reduce) {
   * { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
 }
+
+/* === THEO v2.1: FOTO PROFIL === */
+.avatar-row { display: flex; align-items: center; gap: 16px; margin: 12px 0 16px; }
+.avatar-preview {
+  flex: none; width: 72px; height: 72px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  border: 1px solid var(--border); background: var(--surface);
+  color: var(--accent); font: 700 22px "Space Grotesk", sans-serif;
+}
+.avatar-preview.has-photo, .profile.has-photo {
+  background-size: cover !important; background-position: center !important;
+  color: transparent !important; font-size: 0 !important;
+}
+.avatar-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+label.mini-button { display: inline-block; }
