@@ -20,8 +20,9 @@ jobs:
         run: |
           mkdir www
           rsync -a --exclude=node_modules --exclude=android --exclude=www --exclude=assets --exclude=.git --exclude=.github --exclude=package.json --exclude=package-lock.json --exclude=capacitor.config.json ./ www/
+      - run: python3 make_bg.py
       - run: npx cap add android
-      - run: npx capacitor-assets generate --android --iconBackgroundColor '#000000' --iconBackgroundColorDark '#000000'
+      - run: npx capacitor-assets generate --android
       - run: npx cap sync android
       - name: Versi
         run: sed -i "s/versionCode 1/versionCode ${{ github.run_number }}/" android/app/build.gradle
