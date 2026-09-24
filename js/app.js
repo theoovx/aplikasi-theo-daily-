@@ -2254,9 +2254,10 @@ function init() {
   setupMinimumDay();
   setupSettings();
   setupAvatar();
+  setupGrowth();
 
   const versionEl = document.getElementById("appVersion");
-  if (versionEl) versionEl.textContent = "2.1 (20260924c)";
+  if (versionEl) versionEl.textContent = "2.2 (20260925a)";
 
   refreshApp();
 
@@ -2303,7 +2304,7 @@ function showPage(page) {
     schedule: renderSchedule, progress: updateProgressPage,
     habits: renderHabits, goals: renderGoals, money: renderMoney,
     grooming: renderGrooming, focus: suggestActivity,
-    timer: updateTimerDisplay, review: setupReview, settings: renderSettings
+    timer: updateTimerDisplay, review: setupReview, settings: renderSettings, growth: renderGrowth
   };
   if (hooks[page]) hooks[page]();
 }
@@ -2341,6 +2342,10 @@ function ensureDefaults() {
     data.templates = structuredClone(scheduleTemplates);
   }
   data.habits.forEach(h => { h.completed = isHabitDone(h); });
+  data.history ||= {};
+  data.countdowns ||= [];
+  data.savings ||= [];
+  data.notes ||= [];
 }
 
 function applyAccent() {
@@ -2373,6 +2378,7 @@ function liveRefresh() {
   if (liveRefresh.busy) return;
   liveRefresh.busy = true;
   try {
+    recordToday();
     updateDates();
     updateGreeting();
     updateDailyOverview();
@@ -2382,6 +2388,8 @@ function liveRefresh() {
     const visible = id => { const el = document.getElementById(id); return el && !el.hidden; };
     if (visible("progressPage")) updateProgressPage();
     if (visible("schedulePage")) renderSchedule();
+    const gb = document.getElementById("growthBody");
+    if (gb && visible("growthPage") && !gb.contains(document.activeElement)) renderGrowth();
   } catch (error) {
     console.error("liveRefresh:", error);
   } finally {
@@ -2686,4 +2694,243 @@ function setupAvatar() {
       saveData();
     });
   }
+}
+
+
+/* =========================================================
+   THEO v2.2 — GROWTH (XP, mood, air, rapor, target, catatan)
+========================================================= */
+
+const dk = d => getLocalDateKey(d);
+const dayRec = () => (data.history[dk()] ||= {});
+const persist = () => { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch (e) { console.error(e); } };
+const xpOf = r => (r.t || 0) * 10 + (r.h || 0) * 15 + (r.g || 0) * 5 + (r.w || 0) * 2 + (r.b || 0) * 20 + (r.mood != null ? 5 : 0);
+const totalXP = () => Object.values(data.history).reduce((s, r) => s + xpOf(r), 0);
+const lastDays = n => Array.from({ length: n }, (_, i) => {
+  const d = new Date();
+  d.setDate(d.getDate() - (n - 1 - i));
+  return { key: dk(d), date: d, r: data.history[dk(d)] || {} };
+});
+const MOODS = ["😞", "😕", "😐", "🙂", "😄"];
+const DAILY = [
+  "Progres kecil tiap hari lebih kuat dari semangat sekali besar.",
+  "Misi hari ini: selesaikan satu hal yang kemarin kamu tunda.",
+  "Yang penting mulai. Rapihnya nanti.",
+  "Misi hari ini: 10 menit tanpa HP, isi dengan hal yang kamu suka.",
+  "Istirahat itu bagian dari kerja, bukan hadiahnya.",
+  "Misi hari ini: kabari satu orang yang bikin kamu semangat.",
+  "Hari biasa yang dijalani konsisten bikin hasil luar biasa.",
+  "Misi hari ini: rapikan satu hal kecil di sekitarmu."
+];
+
+function recordToday() {
+  const r = dayRec();
+  const before = JSON.stringify([r.t, r.tt, r.h, r.g]);
+  const tasks = getTodayTasks();
+  r.t = tasks.filter(x => x.completed).length;
+  r.tt = tasks.length;
+  r.h = data.habits.filter(isHabitDone).length;
+  r.g = data.groomingItems.filter(x => x.completed).length;
+  if (before !== JSON.stringify([r.t, r.tt, r.h, r.g])) persist();
+  if (r.tt > 0 && r.t === r.tt && data.celebrated !== dk()) {
+    data.celebrated = dk();
+    persist();
+    celebrate();
+  }
+}
+
+function celebrate() {
+  try { navigator.vibrate && navigator.vibrate([80, 40, 80]); } catch (e) { /* ignore */ }
+  for (let i = 0; i < 40; i++) {
+    const c = document.createElement("i");
+    c.className = "confetti";
+    c.style.cssText = `left:${Math.random() * 100}vw;background:hsl(${Math.random() * 360} 90% 60%);animation-delay:${Math.random() * 0.4}s`;
+    document.body.appendChild(c);
+    setTimeout(() => c.remove(), 2800);
+  }
+}
+
+function dayStreak() {
+  const d = new Date();
+  if (!(data.history[dk(d)] && data.history[dk(d)].t > 0)) d.setDate(d.getDate() - 1);
+  let n = 0;
+  while (data.history[dk(d)] && data.history[dk(d)].t > 0) { n++; d.setDate(d.getDate() - 1); }
+  return n;
+}
+
+let chal = null;
+
+function startChallenge() {
+  if (chal) return;
+  chal = { end: Date.now() + 300000, text: pickNext("chal", focusActivities.low) };
+  renderGrowth();
+  const timer = setInterval(() => {
+    const left = Math.max(0, Math.round((chal.end - Date.now()) / 1000));
+    const el = document.getElementById("chalTime");
+    if (el) el.textContent = `${pad2(Math.floor(left / 60))}:${pad2(left % 60)}`;
+    if (left === 0) {
+      clearInterval(timer);
+      chal = null;
+      dayRec().b = (dayRec().b || 0) + 1;
+      celebrate();
+      saveData();
+      renderGrowth();
+    }
+  }, 1000);
+}
+
+function downloadCSV(name, rows) {
+  if (!rows.length) return;
+  const cols = Object.keys(rows[0]);
+  const q = v => `"${String(v == null ? "" : v).replace(/"/g, '""')}"`;
+  const csv = [cols.join(","), ...rows.map(r => cols.map(c => q(r[c])).join(","))].join("\n");
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv" }));
+  a.download = name;
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+}
+
+function exportCSV() {
+  downloadCSV(`theo-riwayat-${dk()}.csv`, Object.entries(data.history).map(([tanggal, r]) => ({
+    tanggal, task_selesai: r.t || 0, task_total: r.tt || 0, habit: r.h || 0,
+    grooming: r.g || 0, air: r.w || 0, mood: r.mood == null ? "" : r.mood, bonus: r.b || 0
+  })));
+  setTimeout(() => downloadCSV(`theo-uang-${dk()}.csv`, data.transactions), 500);
+}
+
+function renderGrowth() {
+  const el = document.getElementById("growthBody");
+  if (!el) return;
+  const E = escapeHTML;
+  const bar = p => `<div class="gbar"><i style="width:${Math.min(100, Math.max(0, p))}%"></i></div>`;
+
+  const xp = totalXP();
+  const lvl = Math.floor(Math.sqrt(xp / 40)) + 1;
+  const base = (lvl - 1) ** 2 * 40;
+  const next = lvl ** 2 * 40;
+  const r = dayRec();
+  const days = lastDays(7);
+  const streak = dayStreak();
+  const sumT = days.reduce((s, d) => s + (d.r.t || 0), 0);
+  const sumTT = days.reduce((s, d) => s + (d.r.tt || 0), 0);
+  const pct = sumTT ? Math.round(sumT / sumTT * 100) : 0;
+  const grade = pct >= 85 ? "A" : pct >= 70 ? "B" : pct >= 50 ? "C" : "D";
+  const allT = Object.values(data.history).reduce((s, x) => s + (x.t || 0), 0);
+  const badges = [
+    [streak >= 3, "3 hari beruntun"], [streak >= 7, "7 hari beruntun"],
+    [allT >= 50, "50 task selesai"], [lvl >= 5, "Level 5"],
+    [Object.values(data.history).some(x => (x.w || 0) >= 8), "Minum 8 gelas"]
+  ].map(([on, t]) => `<span class="badge ${on ? "on" : ""}">${t}</span>`).join("");
+
+  const chart = days.map(d =>
+    `<div><i style="height:${d.r.tt ? Math.round(d.r.t / d.r.tt * 100) : 4}%"></i>${d.date.toLocaleDateString("id-ID", { weekday: "narrow" })}</div>`).join("");
+  const heat = lastDays(35).map(d =>
+    `<i class="heat" style="--p:${d.r.tt ? d.r.t / d.r.tt : 0}" title="${d.key}"></i>`).join("");
+  const moodWeek = days.map(d => d.r.mood == null ? "·" : MOODS[d.r.mood]).join(" ");
+
+  const left = chal ? Math.max(0, Math.round((chal.end - Date.now()) / 1000)) : 300;
+  const today0 = new Date(dk() + "T00:00");
+  const cds = [...data.countdowns].sort((a, b) => a.date.localeCompare(b.date)).map(c => {
+    const n = Math.round((new Date(c.date + "T00:00") - today0) / 864e5);
+    return `<div class="edit-row"><span class="grow"><strong>${n >= 0 ? "H-" + n : "Lewat " + (-n) + " hari"}</strong> ${E(c.title)}</span><button class="icon-btn" data-act="cd-del" data-id="${c.id}" aria-label="Hapus">✕</button></div>`;
+  }).join("");
+  const svs = data.savings.map(s => `
+    <div class="edit-group"><h3><span>${E(s.title)}</span><span>${Math.min(100, Math.round(s.saved / s.target * 100))}%</span></h3>
+      ${bar(s.saved / s.target * 100)}
+      <div class="gstats"><span>${formatRupiah(s.saved)} dari ${formatRupiah(s.target)}</span></div>
+      <div class="edit-row" style="margin-top:8px"><button class="mini-button" data-act="sv-plus" data-id="${s.id}">Nabung</button><button class="mini-button" data-act="sv-del" data-id="${s.id}">Hapus</button></div>
+    </div>`).join("");
+  const notes = data.notes.map(n => `
+    <div class="edit-row"><span class="grow">${E(n.text)}</span>
+      <button class="mini-button" data-act="note-task" data-id="${n.id}">Jadi task</button>
+      <button class="icon-btn" data-act="note-del" data-id="${n.id}" aria-label="Hapus">✕</button></div>`).join("");
+
+  el.innerHTML = `
+    <section class="card"><h2>Level ${lvl}</h2>${bar((xp - base) / (next - base) * 100)}
+      <div class="gstats"><span>${xp} XP</span><span>${next - xp} XP lagi ke Level ${lvl + 1}</span></div>
+      <p class="settings-note">Beruntun: ${streak} hari. ${E(DAILY[hashText(dk()) % DAILY.length])}</p>
+      <div class="badges">${badges}</div></section>
+
+    <section class="card"><h2>Tantangan 5 menit</h2>
+      ${chal ? `<p class="settings-note">${E(chal.text)}</p><div class="big-time" id="chalTime">${pad2(Math.floor(left / 60))}:${pad2(left % 60)}</div>`
+             : `<p class="settings-note">Lagi males? Ambil satu tugas kecil, kerjakan 5 menit. Bonus 20 XP.</p><button class="primary-button" data-act="chal">Mulai tantangan</button>`}</section>
+
+    <section class="card"><h2>Air minum</h2>${bar((r.w || 0) / 8 * 100)}
+      <div class="gstats"><span>${r.w || 0} dari 8 gelas</span></div>
+      <div class="edit-row" style="margin-top:10px"><button class="mini-button" data-act="water-">−</button><button class="mini-button" data-act="water+">+ Gelas</button></div></section>
+
+    <section class="card"><h2>Mood hari ini</h2>
+      <div class="mood-row">${MOODS.map((m, i) => `<button data-act="mood" data-v="${i}" class="${r.mood === i ? "on" : ""}" aria-label="Mood ${i + 1}">${m}</button>`).join("")}</div>
+      <p class="settings-note">7 hari: ${moodWeek}</p></section>
+
+    <section class="card"><h2>Rapor minggu ini: ${grade}</h2>
+      <p class="settings-note">${sumT} dari ${sumTT} task selesai (${pct}%).</p><div class="chart">${chart}</div></section>
+
+    <section class="card"><h2>35 hari terakhir</h2><div class="heatmap">${heat}</div></section>
+
+    <section class="card"><h2>Hari penting</h2>${cds || `<p class="settings-note">Belum ada hitung mundur.</p>`}
+      <div class="edit-row"><input id="cdTitle" type="text" maxlength="40" placeholder="Nama acara"><input id="cdDate" type="date"></div>
+      <button class="mini-button" data-act="cd-add">Tambah hitung mundur</button></section>
+
+    <section class="card"><h2>Target tabungan</h2>${svs || `<p class="settings-note">Belum ada target.</p>`}
+      <button class="mini-button" data-act="sv-add">Tambah target</button></section>
+
+    <section class="card"><h2>Brain dump</h2>${notes}
+      <div class="edit-row"><input id="noteText" type="text" maxlength="80" placeholder="Tuang isi kepala..."><button class="mini-button" data-act="note-add">Simpan</button></div></section>
+
+    <section class="card"><h2>Ekspor data</h2><p class="settings-note">Riwayat harian dan transaksi uang dalam format CSV.</p>
+      <button class="mini-button" data-act="csv">Unduh CSV</button></section>`;
+}
+
+function setupGrowth() {
+  const el = document.getElementById("growthBody");
+  if (!el) return;
+  el.addEventListener("click", e => {
+    const b = e.target.closest("[data-act]");
+    if (!b) return;
+    const a = b.dataset.act, id = Number(b.dataset.id), r = dayRec();
+    const val = sel => el.querySelector(sel).value.trim();
+
+    if (a === "water+") r.w = (r.w || 0) + 1;
+    else if (a === "water-") r.w = Math.max(0, (r.w || 0) - 1);
+    else if (a === "mood") r.mood = Number(b.dataset.v);
+    else if (a === "chal") { startChallenge(); return; }
+    else if (a === "csv") { exportCSV(); return; }
+    else if (a === "cd-add") {
+      const t = val("#cdTitle"), d = val("#cdDate");
+      if (!t || !d) return;
+      data.countdowns.push({ id: Date.now(), title: t, date: d });
+    } else if (a === "cd-del") data.countdowns = data.countdowns.filter(x => x.id !== id);
+    else if (a === "sv-add") {
+      const t = prompt("Nama target tabungan?");
+      const n = Number(prompt("Nominal target (Rp)?"));
+      if (!t || !(n > 0)) return;
+      data.savings.push({ id: Date.now(), title: t.trim(), target: n, saved: 0 });
+    } else if (a === "sv-plus") {
+      const s = data.savings.find(x => x.id === id);
+      const n = Number(prompt("Tambah berapa (Rp)?"));
+      if (!s || !(n > 0)) return;
+      s.saved += n;
+    } else if (a === "sv-del") {
+      if (!confirm("Hapus target ini?")) return;
+      data.savings = data.savings.filter(x => x.id !== id);
+    } else if (a === "note-add") {
+      const t = val("#noteText");
+      if (!t) return;
+      data.notes.unshift({ id: Date.now(), text: t });
+    } else if (a === "note-task") {
+      const n = data.notes.find(x => x.id === id);
+      if (!n) return;
+      const d = new Date();
+      d.setHours(d.getHours() + 1);
+      data.tasks.push({ id: Date.now(), title: n.text.slice(0, 60), time: `${pad2(d.getHours())}:00`, completed: false, days: [d.getDay()] });
+      data.notes = data.notes.filter(x => x.id !== id);
+      renderTasks();
+      renderSchedule();
+    } else if (a === "note-del") data.notes = data.notes.filter(x => x.id !== id);
+
+    saveData();
+    renderGrowth();
+  });
 }

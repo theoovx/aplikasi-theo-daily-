@@ -17,7 +17,7 @@
 
   <link
     rel="stylesheet"
-    href="css/style.css?v=20260924b"
+    href="css/style.css?v=20260925a"
   >
 
 
@@ -1151,7 +1151,23 @@
       <strong>Settings</strong>
       <small>Nama, warna, isi bawaan</small>
     </button>
+
+    <button class="widget-card" data-page="growth" type="button">
+      <span class="material-symbols-sharp">trending_up</span>
+      <strong>Growth</strong>
+      <small>Level, mood, target</small>
+    </button>
   </div>
+</section>
+
+<section class="page" id="growthPage" hidden>
+  <header class="top-header">
+    <div>
+      <p class="greeting">Level, kebiasaan, dan target.</p>
+      <h1>Growth</h1>
+    </div>
+  </header>
+  <main class="content" id="growthBody"></main>
 </section>
 
 <section class="page" id="settingsPage" hidden>
@@ -1315,7 +1331,7 @@
 </div>
 
 
-<script src="js/app.js?v=20260924c"></script>
+<script src="js/app.js?v=20260925a"></script>
 <script>
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {

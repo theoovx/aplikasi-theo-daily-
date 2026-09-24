@@ -4220,3 +4220,26 @@ button:focus-visible, input:focus-visible, select:focus-visible {
 }
 .avatar-actions { display: flex; gap: 8px; flex-wrap: wrap; }
 label.mini-button { display: inline-block; }
+
+
+/* === THEO v2.2: GROWTH === */
+#growthBody .card { margin-bottom: 14px; }
+.gbar { height: 8px; border-radius: 99px; background: rgba(255,255,255,.08); overflow: hidden; margin: 10px 0; }
+.gbar i { display: block; height: 100%; background: var(--accent); border-radius: inherit; }
+.gstats { display: flex; justify-content: space-between; gap: 8px; color: var(--muted); font-size: 13px; }
+.chart { display: flex; align-items: flex-end; gap: 8px; height: 100px; margin-top: 12px; }
+.chart div { flex: 1; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 4px; font-size: 11px; color: var(--muted); }
+.chart i { display: block; width: 100%; min-height: 4px; border-radius: 6px; background: var(--accent); }
+.heatmap { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; margin-top: 12px; }
+.heat { aspect-ratio: 1; border-radius: 5px; background: rgba(var(--accent-rgb), calc(.08 + var(--p) * .85)); }
+.badges { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.badge { padding: 6px 12px; border-radius: 99px; font-size: 12px; border: 1px solid var(--border); color: var(--muted); }
+.badge.on { color: var(--accent); border-color: var(--accent); }
+.mood-row { display: flex; justify-content: space-between; margin: 12px 0; }
+.mood-row button { font-size: 26px; padding: 8px 10px; border-radius: 14px; border: 1px solid var(--border); background: transparent; cursor: pointer; }
+.mood-row button.on { border-color: var(--accent); background: rgba(var(--accent-rgb), .15); }
+.big-time { font: 700 36px "Space Grotesk", sans-serif; font-variant-numeric: tabular-nums; color: var(--accent); }
+.grow { flex: 1; align-self: center; min-width: 0; overflow-wrap: anywhere; }
+.confetti { position: fixed; top: -14px; width: 9px; height: 14px; border-radius: 2px; z-index: 999; pointer-events: none; animation: confetti-fall 2.2s ease-in forwards; }
+@keyframes confetti-fall { to { transform: translateY(108vh) rotate(540deg); } }
+@media (prefers-reduced-motion: reduce) { .confetti { display: none; } }
