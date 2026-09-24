@@ -59,6 +59,7 @@
     };
   }
 
+  window.THEOviewer = viewer;
   function badges() {
     const box = H("bdgCfg");
     const tot = Object.values(data.history || {}).reduce((s, r) => s + (r.t || 0), 0);
