@@ -3,7 +3,6 @@
 
 <head>
   <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#c96f4a">
 
   <meta charset="UTF-8">
 
@@ -12,16 +11,13 @@
     content="width=device-width, initial-scale=1.0"
   >
 
-  <meta
-    name="theme-color"
-    content="#f4efe6"
-  >
+  <meta name="theme-color" content="#0D0E12">
 
   <title>THEO DAILY APP</title>
 
   <link
     rel="stylesheet"
-    href="css/style.css?v=99999"
+    href="css/style.css?v=20260924"
   >
 
 
@@ -53,20 +49,16 @@
 
         <div>
 
-          <p class="greeting">
-            Good morning, Theo.
-          </p>
+          <p class="greeting" id="homeGreeting">Selamat datang.</p>
 
-          <h1>
-            Today
-          </h1>
+          <h1>Today</h1>
+
+          <p class="live-clock" id="liveClock">--:--:--</p>
 
         </div>
 
 
-        <div class="profile">
-          <span>TR</span>
-        </div>
+        <button class="profile" id="profileButton" data-page="settings" type="button" aria-label="Buka Settings">TH</button>
 
       </header>
 
@@ -387,12 +379,7 @@
             Pakai template cepat
           </h2>
 
-          <div class="theme-grid">
-            <button class="theme-button" type="button" data-template="ojt">OJT</button>
-            <button class="theme-button" type="button" data-template="kerja">Kerja</button>
-            <button class="theme-button" type="button" data-template="sekolah">Sekolah</button>
-            <button class="theme-button" type="button" data-template="kuliah">Kuliah</button>
-          </div>
+          <div class="theme-grid" id="templateGrid"></div>
 
         </section>
 
@@ -1158,8 +1145,59 @@
       <strong>Backup</strong>
       <small>Protect your data</small>
     </button>
+
+    <button class="widget-card" data-page="settings" type="button">
+      <span class="material-symbols-sharp">tune</span>
+      <strong>Settings</strong>
+      <small>Nama, warna, isi bawaan</small>
+    </button>
   </div>
 </section>
+
+<section class="page" id="settingsPage" hidden>
+  <header class="top-header">
+    <div>
+      <p class="greeting">Atur sesuai gayamu.</p>
+      <h1>Settings</h1>
+    </div>
+  </header>
+
+  <main class="content">
+
+    <section class="card">
+      <h2>Profil</h2>
+      <div class="form-group">
+        <label for="settingsName">Nama panggilan</label>
+        <input id="settingsName" type="text" maxlength="24" autocomplete="off">
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Warna aksen</h2>
+      <div class="swatch-row" id="accentRow"></div>
+    </section>
+
+    <section class="card">
+      <h2>Notifikasi</h2>
+      <p class="settings-note" id="notifStatus"></p>
+      <button class="primary-button" id="settingsNotifButton" type="button">Aktifkan notifikasi</button>
+    </section>
+
+    <section class="card">
+      <h2>Isi bawaan</h2>
+      <p class="settings-note">Ubah nama, hapus, atau tambah item. Tersimpan otomatis.</p>
+      <div id="defaultsEditor"></div>
+    </section>
+
+    <section class="card">
+      <h2>Data</h2>
+      <p class="settings-note">Buat cadangan dulu lewat Widgets → Backup.</p>
+      <button class="danger-button" id="resetDataButton" type="button">Reset semua data</button>
+    </section>
+
+  </main>
+</section>
+
 
 <nav class="bottom-nav">
   <button class="nav-item active" data-page="home" type="button">
@@ -1268,13 +1306,11 @@
 </div>
 
 
-  <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
-<script>eruda.init();</script>
 <script src="js/app.js"></script>
 <script>
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
-    navigator.serviceWorker.register("./sw.js")
+    navigator.serviceWorker.register("./sw.js", { updateViaCache: "none" })
       .then(() => console.log("THEO DAILY service worker ready"))
       .catch(error => console.error("Service worker error:", error));
   });

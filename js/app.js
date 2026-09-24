@@ -46,6 +46,8 @@ const defaultData = {
 
   holidayMode: false,
 
+  settings: { name: "Theo", accent: "orange" },
+
   theme: "paper"
 };
 
@@ -105,12 +107,12 @@ function loadData() {
 
 
 function saveData() {
-
-  localStorage.setItem(
-    STORAGE_KEY,
-    JSON.stringify(data)
-  );
-
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  } catch (error) {
+    console.error("Gagal menyimpan data:", error);
+  }
+  if (typeof liveRefresh === "function") liveRefresh();
 }
 
 
@@ -136,7 +138,7 @@ function getLocalDateKey(date = new Date()) {
 function formatDate(date = new Date()) {
 
   return new Intl.DateTimeFormat(
-    "en-US",
+    "id-ID",
     {
       weekday: "long",
       day: "numeric",
@@ -208,10 +210,7 @@ function getTodayTasks() {
 
 function resetDailyTasks() {
 
-  const today =
-    new Date()
-      .toISOString()
-      .split("T")[0];
+  const today = getLocalDateKey();
 
   const lastReset =
     localStorage.getItem(
@@ -1046,17 +1045,17 @@ function renderHabits() {
 
   list.innerHTML = data.habits.map(habit => `
     <button
-      class="task-item ${habit.completed ? "completed" : ""}"
+      class="task-item ${isHabitDone(habit) ? "completed" : ""}"
       data-habit-id="${habit.id}"
       type="button"
     >
       <span class="task-check">
-        ${habit.completed ? "✓" : ""}
+        ${isHabitDone(habit) ? "✓" : ""}
       </span>
 
       <span class="task-info">
         <strong>${escapeHTML(habit.title)}</strong>
-        <small>Streak: ${habit.streak || 0} day${habit.streak === 1 ? "" : "s"}</small>
+        <small>Streak: ${habitStreak(habit)} hari</small>
       </span>
     </button>
   `).join("");
@@ -1075,33 +1074,20 @@ function toggleHabit(id) {
   const today = getLocalDateKey();
 
   if (habit.lastCompleted === today) {
-    habit.completed = false;
-    saveData();
-    renderHabits();
-    return;
-  }
-
-  habit.completed = true;
-
-  if (habit.lastCompleted) {
-    const last = new Date(habit.lastCompleted);
-    const current = new Date(today);
-
-    const difference =
-      Math.round(
-        (current - last) / 86400000
-      );
-
-    if (difference === 1) {
-      habit.streak = (habit.streak || 0) + 1;
-    } else {
-      habit.streak = 1;
-    }
+    habit.lastCompleted = habit.prevCompleted || null;
+    habit.streak = habit.prevStreak || 0;
   } else {
-    habit.streak = 1;
+    const y = new Date();
+    y.setDate(y.getDate() - 1);
+    habit.prevCompleted = habit.lastCompleted || null;
+    habit.prevStreak = habit.streak || 0;
+    habit.streak = habit.lastCompleted === getLocalDateKey(y)
+      ? (habit.streak || 0) + 1
+      : 1;
+    habit.lastCompleted = today;
   }
 
-  habit.lastCompleted = today;
+  habit.completed = habit.lastCompleted === today;
 
   saveData();
   renderHabits();
@@ -1517,7 +1503,7 @@ const scheduleTemplates = {
 
 function applyScheduleTemplate(name) {
 
-  const template = scheduleTemplates[name];
+  const template = data.templates[name];
 
   if (!template) return;
 
@@ -1545,13 +1531,13 @@ function applyScheduleTemplate(name) {
 }
 
 function setupScheduleTemplates() {
-
-  document.querySelectorAll("[data-template]").forEach(button => {
-    button.addEventListener("click", () => {
-      applyScheduleTemplate(button.dataset.template);
-    });
+  const grid = document.getElementById("templateGrid");
+  if (!grid) return;
+  grid.addEventListener("click", event => {
+    const button = event.target.closest("[data-template]");
+    if (button) applyScheduleTemplate(button.dataset.template);
   });
-
+  renderTemplateButtons();
 }
 
 
@@ -1826,6 +1812,9 @@ function setupReview() {
       `${completed} dari ${tasks.length} task selesai hari ini.`;
   }
 
+  if (setupReview.bound) return;
+  setupReview.bound = true;
+
   document
     .querySelectorAll(".review-mood")
     .forEach(button => {
@@ -2022,7 +2011,7 @@ function updateDailyOverview() {
   if (habits) {
     const completedHabits =
       data.habits.filter(
-        habit => habit.completed
+        habit => isHabitDone(habit)
       ).length;
 
     habits.textContent =
@@ -2058,50 +2047,12 @@ function updateDailyOverview() {
 ========================================================= */
 
 function setupNavigation() {
-  const navItems = document.querySelectorAll(".nav-item, .widget-card[data-page]");
-
-  navItems.forEach(item => {
-    item.addEventListener("click", () => {
-      const page = item.dataset.page;
-      if (!page) return;
-
-      const targetId = `${page}Page`;
-      const target = document.getElementById(targetId);
-
-      if (!target) {
-        console.error("Page tidak ditemukan:", targetId);
-        return;
-      }
-
-      document.querySelectorAll(".page").forEach(section => {
-        section.hidden = true;
-      });
-
-      target.hidden = false;
-
-      navItems.forEach(nav => {
-        nav.classList.remove("active");
-      });
-
-      item.classList.add("active");
-
-      window.scrollTo({
-        top: 0,
-        behavior: "smooth"
-      });
-
-      if (page === "schedule") renderSchedule();
-      if (page === "progress") updateProgressPage();
-      if (page === "habits") renderHabits();
-      if (page === "goals") renderGoals();
-      if (page === "money") renderMoney();
-      if (page === "grooming") renderGrooming();
-      if (page === "focus") suggestActivity();
-      if (page === "review") setupReview();
-      if (page === "timer") updateTimerDisplay();
-    });
+  document.addEventListener("click", event => {
+    const el = event.target.closest("[data-page]");
+    if (el) showPage(el.dataset.page);
   });
 }
+
 function applyTheme(theme) {
 
   const themes = [
@@ -2207,6 +2158,8 @@ function refreshApp() {
 
 function init() {
 
+  ensureDefaults();
+  applyAccent();
   resetDailyTasks();
 
   applyTheme(
@@ -2234,20 +2187,11 @@ function init() {
   updateDailyOverview();
 
   setupMinimumDay();
+  setupSettings();
 
   refreshApp();
 
-  setInterval(
-    () => {
-
-      updateDates();
-      updateNextReminder();
-      updateSuggestion();
-      checkReminders();
-
-    },
-    60000
-  );
+  startLive();
 
   console.log(
     "THEO DAILY is running."
@@ -2265,76 +2209,355 @@ document.addEventListener(
   init
 );
 
+/* =========================================================
+   THEO v2 — NAVIGATION, LIVE ENGINE, SETTINGS
+========================================================= */
 
-    
-/* === THEO WIDGET NAV === */
-document.querySelectorAll(".widget-card[data-page]").forEach(card => {
-  card.addEventListener("click", () => {
-    const page = card.dataset.page;
-    const target = document.getElementById(`${page}Page`);
+const NAV_PAGES = ["home", "schedule", "progress", "money", "widgets"];
 
-    if (!target) {
-      console.error("Widget page tidak ditemukan:", `${page}Page`);
-      return;
+function showPage(page) {
+  const target = document.getElementById(page + "Page");
+  if (!target) {
+    console.error("Page tidak ditemukan:", page + "Page");
+    return;
+  }
+  document.querySelectorAll(".page").forEach(p => { p.hidden = true; });
+  target.hidden = false;
+
+  const navPage = NAV_PAGES.includes(page) ? page : "widgets";
+  document.querySelectorAll(".nav-item").forEach(n =>
+    n.classList.toggle("active", n.dataset.page === navPage)
+  );
+  window.scrollTo({ top: 0 });
+
+  const hooks = {
+    schedule: renderSchedule, progress: updateProgressPage,
+    habits: renderHabits, goals: renderGoals, money: renderMoney,
+    grooming: renderGrooming, focus: suggestActivity,
+    timer: updateTimerDisplay, review: setupReview, settings: renderSettings
+  };
+  if (hooks[page]) hooks[page]();
+}
+
+/* ---------- helpers ---------- */
+
+const pad2 = n => String(n).padStart(2, "0");
+
+function isHabitDone(habit) {
+  return habit.lastCompleted === getLocalDateKey();
+}
+
+function habitStreak(habit) {
+  if (!habit.lastCompleted) return 0;
+  const y = new Date();
+  y.setDate(y.getDate() - 1);
+  const ok = habit.lastCompleted === getLocalDateKey() ||
+             habit.lastCompleted === getLocalDateKey(y);
+  return ok ? (habit.streak || 0) : 0;
+}
+
+/* ---------- defaults + accent ---------- */
+
+const ACCENTS = {
+  orange: { label: "Oranye", hex: "#FF5A00", rgb: "255,90,0", hover: "#FF7024" },
+  blue:   { label: "Biru",   hex: "#3B82F6", rgb: "59,130,246", hover: "#60A5FA" },
+  green:  { label: "Hijau",  hex: "#22C55E", rgb: "34,197,94", hover: "#4ADE80" },
+  violet: { label: "Ungu",   hex: "#8B5CF6", rgb: "139,92,246", hover: "#A78BFA" },
+  pink:   { label: "Pink",   hex: "#EC4899", rgb: "236,72,153", hover: "#F472B6" }
+};
+
+function ensureDefaults() {
+  data.settings = { name: "Theo", accent: "orange", ...(data.settings || {}) };
+  if (!data.templates || typeof data.templates !== "object" || Array.isArray(data.templates)) {
+    data.templates = structuredClone(scheduleTemplates);
+  }
+  data.habits.forEach(h => { h.completed = isHabitDone(h); });
+}
+
+function applyAccent() {
+  const a = ACCENTS[data.settings.accent] || ACCENTS.orange;
+  const s = document.documentElement.style;
+  s.setProperty("--accent", a.hex);
+  s.setProperty("--ui-accent", a.hex);
+  s.setProperty("--accent-hover", a.hover);
+  s.setProperty("--accent-rgb", a.rgb);
+}
+
+/* ---------- live engine ---------- */
+
+function updateClock(now = new Date()) {
+  const el = document.getElementById("liveClock");
+  if (el) el.textContent = `${pad2(now.getHours())}:${pad2(now.getMinutes())}:${pad2(now.getSeconds())}`;
+}
+
+function updateGreeting(now = new Date()) {
+  const h = now.getHours();
+  const g = h < 11 ? "Selamat pagi" : h < 15 ? "Selamat siang" : h < 18 ? "Selamat sore" : "Selamat malam";
+  const name = data.settings.name || "Theo";
+  const el = document.getElementById("homeGreeting");
+  if (el) el.textContent = `${g}, ${name}.`;
+  const p = document.getElementById("profileButton");
+  if (p) p.textContent = name.trim().slice(0, 2).toUpperCase();
+}
+
+function liveRefresh() {
+  if (liveRefresh.busy) return;
+  liveRefresh.busy = true;
+  try {
+    updateDates();
+    updateGreeting();
+    updateDailyOverview();
+    updateProgress();
+    updateNextReminder();
+    updateSuggestion();
+    const visible = id => { const el = document.getElementById(id); return el && !el.hidden; };
+    if (visible("progressPage")) updateProgressPage();
+    if (visible("schedulePage")) renderSchedule();
+  } catch (error) {
+    console.error("liveRefresh:", error);
+  } finally {
+    liveRefresh.busy = false;
+  }
+}
+
+function renderAll() {
+  renderTasks();
+  renderSchedule();
+  renderHabits();
+  renderGoals();
+  renderGrooming();
+  renderMoney();
+  renderTemplateButtons();
+  renderSettings();
+  liveRefresh();
+}
+
+function rolloverDay() {
+  resetDailyTasks();
+  ensureDefaults();
+  notifiedReminders.clear();
+  renderTasks();
+  renderHabits();
+  renderGrooming();
+  liveRefresh();
+}
+
+let liveDay = "";
+let liveMinute = "";
+
+function tick() {
+  const now = new Date();
+  updateClock(now);
+
+  const day = getLocalDateKey(now);
+  if (day !== liveDay) {
+    const first = liveDay === "";
+    liveDay = day;
+    if (!first) rolloverDay();
+  }
+
+  const minute = getCurrentTime();
+  if (minute !== liveMinute) {
+    liveMinute = minute;
+    liveRefresh();
+    checkReminders();
+  }
+}
+
+function startLive() {
+  tick();
+  setInterval(tick, 1000);
+  document.addEventListener("visibilitychange", () => { if (!document.hidden) tick(); });
+  window.addEventListener("storage", e => {
+    if (e.key !== STORAGE_KEY) return;
+    data = loadData();
+    ensureDefaults();
+    applyAccent();
+    renderAll();
+  });
+}
+
+/* ---------- schedule templates (editable) ---------- */
+
+function renderTemplateButtons() {
+  const grid = document.getElementById("templateGrid");
+  if (!grid) return;
+  const names = Object.keys(data.templates);
+  grid.innerHTML = names.length
+    ? names.map(n => `<button class="theme-button" type="button" data-template="${escapeHTML(n)}">${escapeHTML(n.charAt(0).toUpperCase() + n.slice(1))}</button>`).join("")
+    : `<p class="settings-note">Belum ada template. Buat di Settings.</p>`;
+}
+
+/* ---------- settings ---------- */
+
+const LIST_EDITORS = [
+  { key: "groomingItems", label: "Grooming", ph: "Rutinitas baru",
+    make: t => ({ id: Date.now(), title: t, completed: false }), after: () => renderGrooming() },
+  { key: "habits", label: "Habits", ph: "Habit baru",
+    make: t => ({ id: Date.now(), title: t, completed: false, streak: 0, lastCompleted: null }), after: () => renderHabits() },
+  { key: "goals", label: "Goals", ph: "Goal baru",
+    make: t => ({ id: Date.now(), title: t, progress: 0 }), after: () => renderGoals() }
+];
+
+function renderDefaultsEditor() {
+  const box = document.getElementById("defaultsEditor");
+  if (!box) return;
+  const esc = escapeHTML;
+
+  const lists = LIST_EDITORS.map(L => `
+    <div class="edit-group"><h3>${L.label}</h3>
+      ${data[L.key].map(it => `
+        <div class="edit-row">
+          <input type="text" maxlength="60" value="${esc(it.title)}" data-list="${L.key}" data-id="${it.id}" aria-label="Nama ${L.label}">
+          <button class="icon-btn" type="button" data-del-list="${L.key}" data-id="${it.id}" aria-label="Hapus">✕</button>
+        </div>`).join("")}
+      <div class="edit-row">
+        <input type="text" maxlength="60" placeholder="${L.ph}" data-new="${L.key}">
+        <button class="mini-button" type="button" data-add-list="${L.key}">Tambah</button>
+      </div>
+    </div>`).join("");
+
+  const tpls = Object.entries(data.templates).map(([name, rows]) => `
+    <div class="edit-group">
+      <h3><span>Template ${esc(name)}</span>
+        <button class="mini-button" type="button" data-del-tpl="${esc(name)}">Hapus</button></h3>
+      ${rows.map((r, i) => `
+        <div class="edit-row">
+          <input type="text" maxlength="60" value="${esc(r.title)}" data-tpl="${esc(name)}" data-i="${i}" data-f="title" aria-label="Kegiatan">
+          <input type="time" value="${esc(r.time)}" data-tpl="${esc(name)}" data-i="${i}" data-f="time" aria-label="Jam">
+          <button class="icon-btn" type="button" data-del-row="${esc(name)}" data-i="${i}" aria-label="Hapus">✕</button>
+        </div>`).join("")}
+      <button class="mini-button" type="button" data-add-row="${esc(name)}">Tambah jadwal</button>
+    </div>`).join("");
+
+  box.innerHTML = lists +
+    `<div class="edit-group"><h3>Template jadwal</h3></div>` + tpls +
+    `<div class="edit-row"><input type="text" maxlength="20" placeholder="Nama template baru" data-new-tpl>
+       <button class="mini-button" type="button" data-add-tpl>Buat</button></div>`;
+}
+
+function renderSettings() {
+  const name = document.getElementById("settingsName");
+  if (name && document.activeElement !== name) name.value = data.settings.name;
+
+  const row = document.getElementById("accentRow");
+  if (row) {
+    row.innerHTML = Object.entries(ACCENTS).map(([k, a]) =>
+      `<button class="swatch" type="button" style="--sw:${a.hex}" data-accent="${k}" aria-label="${a.label}" aria-pressed="${data.settings.accent === k}"></button>`
+    ).join("");
+  }
+
+  const status = document.getElementById("notifStatus");
+  if (status) {
+    status.textContent = !("Notification" in window) ? "Browser ini tidak mendukung notifikasi."
+      : Notification.permission === "granted" ? "Notifikasi aktif."
+      : Notification.permission === "denied" ? "Notifikasi diblokir. Izinkan lewat setelan situs di browser."
+      : "Notifikasi belum diaktifkan.";
+  }
+
+  if (!document.getElementById("defaultsEditor").contains(document.activeElement)) {
+    renderDefaultsEditor();
+  }
+}
+
+function setupSettings() {
+  const name = document.getElementById("settingsName");
+  if (name) {
+    name.addEventListener("input", () => {
+      data.settings.name = name.value.trim().slice(0, 24) || "Theo";
+      saveData();
+    });
+  }
+
+  const row = document.getElementById("accentRow");
+  if (row) {
+    row.addEventListener("click", e => {
+      const b = e.target.closest("[data-accent]");
+      if (!b) return;
+      data.settings.accent = b.dataset.accent;
+      applyAccent();
+      saveData();
+      renderSettings();
+    });
+  }
+
+  const notif = document.getElementById("settingsNotifButton");
+  if (notif) {
+    notif.addEventListener("click", () => {
+      if (!("Notification" in window)) return;
+      Notification.requestPermission().then(renderSettings);
+    });
+  }
+
+  const reset = document.getElementById("resetDataButton");
+  if (reset) {
+    reset.addEventListener("click", () => {
+      if (!confirm("Hapus SEMUA data (task, habit, goal, uang, pengaturan)? Tidak bisa dibatalkan.")) return;
+      localStorage.removeItem(STORAGE_KEY);
+      localStorage.removeItem("theoDailyLastReset");
+      location.reload();
+    });
+  }
+
+  const box = document.getElementById("defaultsEditor");
+  if (!box) return;
+  const save = () => { saveData(); renderDefaultsEditor(); };
+  const editor = key => LIST_EDITORS.find(l => l.key === key);
+
+  box.addEventListener("change", e => {
+    const t = e.target;
+    const v = t.value.trim();
+    if (t.dataset.list) {
+      const item = data[t.dataset.list].find(x => x.id === Number(t.dataset.id));
+      if (!item) return;
+      if (!v) { t.value = item.title; return; }
+      item.title = v;
+      saveData();
+      editor(t.dataset.list).after();
+    } else if (t.dataset.tpl) {
+      const rowData = (data.templates[t.dataset.tpl] || [])[Number(t.dataset.i)];
+      if (!rowData) return;
+      if (!v) { t.value = rowData[t.dataset.f]; return; }
+      rowData[t.dataset.f] = v;
+      saveData();
     }
-
-    document.querySelectorAll(".page").forEach(section => {
-      section.hidden = true;
-    });
-
-    target.hidden = false;
-
-    card.classList.add("widget-card-pressed");
-    setTimeout(() => card.classList.remove("widget-card-pressed"), 160);
-
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth"
-    });
-
-    if (page === "schedule") renderSchedule();
-    if (page === "progress") updateProgressPage();
-    if (page === "habits") renderHabits();
-    if (page === "goals") renderGoals();
-    if (page === "money") renderMoney();
-    if (page === "grooming") renderGrooming();
-    if (page === "focus") suggestActivity();
-    if (page === "review") setupReview();
-    if (page === "timer") updateTimerDisplay();
   });
-});
 
+  box.addEventListener("click", e => {
+    const b = e.target.closest("button");
+    if (!b) return;
+    const d = b.dataset;
 
-
-/* === THEO WIDGET NAV FINAL === */
-document.addEventListener("DOMContentLoaded", () => {
-  document.querySelectorAll(".widget-card[data-page]").forEach(card => {
-    card.addEventListener("click", () => {
-      const page = card.dataset.page;
-      const target = document.getElementById(page + "Page");
-
-      if (!target) {
-        console.error("Widget page tidak ditemukan:", page + "Page");
-        return;
-      }
-
-      document.querySelectorAll(".page").forEach(section => {
-        section.hidden = true;
-      });
-
-      target.hidden = false;
-
-      window.scrollTo({
-        top: 0,
-        behavior: "smooth"
-      });
-
-      if (page === "habits" && typeof renderHabits === "function") renderHabits();
-      if (page === "goals" && typeof renderGoals === "function") renderGoals();
-      if (page === "grooming" && typeof renderGrooming === "function") renderGrooming();
-      if (page === "focus" && typeof suggestActivity === "function") suggestActivity();
-      if (page === "timer" && typeof updateTimerDisplay === "function") updateTimerDisplay();
-      if (page === "review" && typeof setupReview === "function") setupReview();
-    });
+    if (d.delList) {
+      if (!confirm("Hapus item ini?")) return;
+      data[d.delList] = data[d.delList].filter(x => x.id !== Number(d.id));
+      editor(d.delList).after();
+      save();
+    } else if (d.addList) {
+      const input = box.querySelector(`[data-new="${d.addList}"]`);
+      const v = input.value.trim();
+      if (!v) return;
+      data[d.addList].push(editor(d.addList).make(v));
+      editor(d.addList).after();
+      save();
+    } else if (d.delRow !== undefined) {
+      data.templates[d.delRow].splice(Number(d.i), 1);
+      save();
+    } else if (d.addRow !== undefined) {
+      data.templates[d.addRow].push({ title: "Kegiatan baru", time: "08:00" });
+      save();
+    } else if (d.delTpl !== undefined) {
+      if (!confirm(`Hapus template "${d.delTpl}"?`)) return;
+      delete data.templates[d.delTpl];
+      save();
+      renderTemplateButtons();
+    } else if ("addTpl" in d) {
+      const input = box.querySelector("[data-new-tpl]");
+      const v = input.value.trim().toLowerCase();
+      if (!v || data.templates[v]) return;
+      data.templates[v] = [{ title: "Kegiatan baru", time: "08:00" }];
+      save();
+      renderTemplateButtons();
+    }
   });
-});
+}

@@ -1,41 +1,27 @@
-const CACHE_NAME = "theo-daily-v1";
+const CACHE = "theo-daily-v2";
 
-const APP_FILES = [
-  "./",
-  "./index.html",
-  "./css/style.css",
-  "./js/app.js",
-  "./manifest.json"
-];
-
-self.addEventListener("install", event => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => cache.addAll(APP_FILES))
-  );
-  self.skipWaiting();
-});
+self.addEventListener("install", () => self.skipWaiting());
 
 self.addEventListener("activate", event => {
-  event.waitUntil(self.clients.claim());
-});
-
-self.addEventListener("fetch", event => {
-  event.respondWith(
-    caches.match(event.request).then(cached => {
-      return cached || fetch(event.request);
-    })
+  event.waitUntil(
+    caches.keys()
+      .then(keys => Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k))))
+      .then(() => self.clients.claim())
   );
 });
 
-self.addEventListener("message", event => {
-  if (event.data?.type === "SHOW_NOTIFICATION") {
-    self.registration.showNotification(
-      event.data.title || "THEO DAILY",
-      {
-        body: event.data.body || "Ada sesuatu yang perlu kamu lakukan.",
-        icon: event.data.icon || "",
-        badge: event.data.icon || ""
-      }
-    );
-  }
+// Network-first: selalu ambil versi terbaru, cache hanya untuk offline.
+self.addEventListener("fetch", event => {
+  const req = event.request;
+  if (req.method !== "GET" || !req.url.startsWith(self.location.origin)) return;
+
+  event.respondWith(
+    fetch(req, { cache: "no-cache" })
+      .then(res => {
+        const copy = res.clone();
+        caches.open(CACHE).then(c => c.put(req, copy));
+        return res;
+      })
+      .catch(() => caches.match(req).then(hit => hit || caches.match("./index.html")))
+  );
 });
