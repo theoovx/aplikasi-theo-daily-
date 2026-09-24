@@ -2183,7 +2183,7 @@ function init() {
   setupPolish();
 
   const versionEl = document.getElementById("appVersion");
-  if (versionEl) versionEl.textContent = "2.3 (20260925b)";
+  if (versionEl) versionEl.textContent = "2.4 (20260926a)";
 
   refreshApp();
 
