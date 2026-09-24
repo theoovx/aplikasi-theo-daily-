@@ -107,7 +107,7 @@ html {
 }
 
 body {
-  min-height: 100vh;
+  min-height: 100dvh;
 
   background: var(--bg);
   color: var(--text);
@@ -131,7 +131,7 @@ body {
 .app {
   width: 100%;
   max-width: 620px;
-  min-height: 100vh;
+  min-height: 100dvh;
   margin: 0 auto;
 
   background: var(--bg);
@@ -1278,7 +1278,7 @@ body {
 
 /* PAGE */
 .page {
-  min-height: 100vh;
+  min-height: 100dvh;
   box-sizing: border-box;
 }
 
@@ -2178,7 +2178,7 @@ body {
 .page {
   width: 100% !important;
   max-width: 100% !important;
-  min-height: calc(100vh - 105px) !important;
+  min-height: calc(100dvh - 105px) !important;
   margin: 0 !important;
   padding: 0 0 25px !important;
   box-sizing: border-box !important;
@@ -2327,7 +2327,7 @@ body {
 }
 
 .page {
-  min-height: calc(100vh - 100px) !important;
+  min-height: calc(100dvh - 100px) !important;
 }
 
 .content {
@@ -2625,7 +2625,7 @@ body {
 }
 
 body {
-  min-height: 100vh;
+  min-height: 100dvh;
   background:
     radial-gradient(circle at 85% 0%, rgba(var(--accent-rgb),.055), transparent 28%),
     radial-gradient(circle at 0% 50%, rgba(255,255,255,.025), transparent 25%),
@@ -2650,7 +2650,7 @@ button {
 ========================================================= */
 
 .page {
-  min-height: 100vh !important;
+  min-height: 100dvh !important;
 }
 
 .content {
@@ -3176,7 +3176,7 @@ html {
 
 body {
   margin: 0;
-  min-height: 100vh;
+  min-height: 100dvh;
 
   background:
     radial-gradient(
@@ -3195,7 +3195,7 @@ body {
 }
 
 .stealth-luxury-app {
-  min-height: 100vh;
+  min-height: 100dvh;
   background: transparent;
 }
 
@@ -4263,3 +4263,17 @@ label.mini-button { display: inline-block; }
 }
 .back-btn:active { color: var(--accent); border-color: var(--accent); }
 .timer-card select { width: 100%; margin-top: 14px; }
+
+/* === THEO v2.3.1: SAFE AREA === */
+body { padding-top: env(safe-area-inset-top); }
+.widgets-grid > * { min-width: 0; overflow-wrap: anywhere; }
+
+/* === THEO v2.3.2: NAV + KONTEN === */
+.bottom-nav {
+  bottom: calc(14px + env(safe-area-inset-bottom)) !important;
+  height: 68px !important;
+  min-height: 68px !important;
+}
+.page {
+  padding-bottom: calc(110px + env(safe-area-inset-bottom)) !important;
+}
