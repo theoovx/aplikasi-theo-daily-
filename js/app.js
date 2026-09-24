@@ -1631,7 +1631,7 @@ function renderGrooming() {
           <strong>${escapeHTML(item.title)}</strong>
         </div>
       </button>
-    `).join("");
+    `).join("") || `<div class="empty-state"><div>✓</div><p>Belum ada rutinitas.</p><span>Tambah satu di atas.</span></div>`;
 
   listEl.querySelectorAll("[data-grooming-id]").forEach(btn => {
     btn.addEventListener("click", () => {
@@ -1854,69 +1854,6 @@ function setupMoney() {
    DAILY REVIEW
 ========================================================= */
 
-function setupReview() {
-
-  const progress =
-    document.getElementById("reviewProgress");
-
-  const note =
-    document.getElementById("reviewNote");
-
-  const saveButton =
-    document.getElementById("saveReviewButton");
-
-  if (progress) {
-
-    const tasks =
-      getTodayTasks();
-
-    const completed =
-      tasks.filter(task => task.completed).length;
-
-    progress.textContent =
-      `${completed} dari ${tasks.length} task selesai hari ini.`;
-  }
-
-  if (setupReview.bound) return;
-  setupReview.bound = true;
-
-  document
-    .querySelectorAll(".review-mood")
-    .forEach(button => {
-
-      button.addEventListener("click", () => {
-
-        document
-          .querySelectorAll(".review-mood")
-          .forEach(item =>
-            item.classList.remove("active")
-          );
-
-        button.classList.add("active");
-
-        data.todayMood =
-          button.dataset.mood;
-      });
-    });
-
-  if (saveButton) {
-
-    saveButton.addEventListener("click", () => {
-
-      data.review = {
-        date: getLocalDateKey(),
-        mood: data.todayMood || null,
-        note: note ? note.value.trim() : ""
-      };
-
-      saveData();
-
-      alert("Daily review tersimpan.");
-    });
-  }
-}
-
-
 /* =========================================================
    FOCUS TIMER
 ========================================================= */
@@ -1924,65 +1861,54 @@ function setupReview() {
 let timerInterval = null;
 let timerSeconds = 25 * 60;
 
+let timerEnd = 0;
+
 function updateTimerDisplay() {
-
-  const display =
-    document.getElementById("timerDisplay");
-
+  const display = document.getElementById("timerDisplay");
   if (!display) return;
-
-  const minutes =
-    Math.floor(timerSeconds / 60);
-
-  const seconds =
-    timerSeconds % 60;
-
-  display.textContent =
-    `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+  display.textContent = `${pad2(Math.floor(timerSeconds / 60))}:${pad2(timerSeconds % 60)}`;
 }
 
 function startTimer() {
-
-  if (timerInterval) return;
-
+  if (timerInterval || timerSeconds <= 0) return;
+  timerEnd = Date.now() + timerSeconds * 1000;
   timerInterval = setInterval(() => {
-
+    timerSeconds = Math.max(0, Math.round((timerEnd - Date.now()) / 1000));
+    updateTimerDisplay();
     if (timerSeconds <= 0) {
-
       clearInterval(timerInterval);
       timerInterval = null;
-
-      alert("Focus session selesai.");
-
-      return;
+      timerDone();
     }
-
-    timerSeconds--;
-
-    updateTimerDisplay();
-
-  }, 1000);
+  }, 500);
 }
 
 function pauseTimer() {
-
   if (!timerInterval) return;
-
+  timerSeconds = Math.max(0, Math.round((timerEnd - Date.now()) / 1000));
   clearInterval(timerInterval);
   timerInterval = null;
+  updateTimerDisplay();
 }
 
 function resetTimer() {
-
   pauseTimer();
-
-  const duration =
-    document.getElementById("timerDuration");
-
-  timerSeconds =
-    Number(duration ? duration.value : 25) * 60;
-
+  const duration = document.getElementById("timerDuration");
+  timerSeconds = Number(duration ? duration.value : 25) * 60;
   updateTimerDisplay();
+}
+
+function timerDone() {
+  const duration = document.getElementById("timerDuration");
+  const minutes = Number(duration ? duration.value : 25);
+  const r = dayRec();
+  r.b = (r.b || 0) + 1;
+  celebrate();
+  saveData();
+  if ("Notification" in window && Notification.permission === "granted") {
+    new Notification("Sesi fokus selesai", { body: `${minutes} menit beres. Istirahat sebentar.` });
+  }
+  resetTimer();
 }
 
 function setupTimer() {
@@ -2247,7 +2173,6 @@ function init() {
   setupGroomingForm();
   renderGrooming();
   setupScheduleTemplates();
-  setupReview();
   setupTimer();
   updateDailyOverview();
 
@@ -2255,9 +2180,10 @@ function init() {
   setupSettings();
   setupAvatar();
   setupGrowth();
+  setupPolish();
 
   const versionEl = document.getElementById("appVersion");
-  if (versionEl) versionEl.textContent = "2.2 (20260925a)";
+  if (versionEl) versionEl.textContent = "2.3 (20260925b)";
 
   refreshApp();
 
@@ -2303,8 +2229,8 @@ function showPage(page) {
   const hooks = {
     schedule: renderSchedule, progress: updateProgressPage,
     habits: renderHabits, goals: renderGoals, money: renderMoney,
-    grooming: renderGrooming, focus: suggestActivity,
-    timer: updateTimerDisplay, review: setupReview, settings: renderSettings, growth: renderGrowth
+    grooming: renderGrooming, focus: () => { suggestActivity(); updateTimerDisplay(); },
+    settings: renderSettings, growth: renderGrowth
   };
   if (hooks[page]) hooks[page]();
 }
@@ -2385,6 +2311,7 @@ function liveRefresh() {
     updateProgress();
     updateNextReminder();
     updateSuggestion();
+    updateWidgetInfo();
     const visible = id => { const el = document.getElementById(id); return el && !el.hidden; };
     if (visible("progressPage")) updateProgressPage();
     if (visible("schedulePage")) renderSchedule();
@@ -2758,26 +2685,6 @@ function dayStreak() {
   return n;
 }
 
-let chal = null;
-
-function startChallenge() {
-  if (chal) return;
-  chal = { end: Date.now() + 300000, text: pickNext("chal", focusActivities.low) };
-  renderGrowth();
-  const timer = setInterval(() => {
-    const left = Math.max(0, Math.round((chal.end - Date.now()) / 1000));
-    const el = document.getElementById("chalTime");
-    if (el) el.textContent = `${pad2(Math.floor(left / 60))}:${pad2(left % 60)}`;
-    if (left === 0) {
-      clearInterval(timer);
-      chal = null;
-      dayRec().b = (dayRec().b || 0) + 1;
-      celebrate();
-      saveData();
-      renderGrowth();
-    }
-  }, 1000);
-}
 
 function downloadCSV(name, rows) {
   if (!rows.length) return;
@@ -2829,7 +2736,6 @@ function renderGrowth() {
     `<i class="heat" style="--p:${d.r.tt ? d.r.t / d.r.tt : 0}" title="${d.key}"></i>`).join("");
   const moodWeek = days.map(d => d.r.mood == null ? "·" : MOODS[d.r.mood]).join(" ");
 
-  const left = chal ? Math.max(0, Math.round((chal.end - Date.now()) / 1000)) : 300;
   const today0 = new Date(dk() + "T00:00");
   const cds = [...data.countdowns].sort((a, b) => a.date.localeCompare(b.date)).map(c => {
     const n = Math.round((new Date(c.date + "T00:00") - today0) / 864e5);
@@ -2852,9 +2758,6 @@ function renderGrowth() {
       <p class="settings-note">Beruntun: ${streak} hari. ${E(DAILY[hashText(dk()) % DAILY.length])}</p>
       <div class="badges">${badges}</div></section>
 
-    <section class="card"><h2>Tantangan 5 menit</h2>
-      ${chal ? `<p class="settings-note">${E(chal.text)}</p><div class="big-time" id="chalTime">${pad2(Math.floor(left / 60))}:${pad2(left % 60)}</div>`
-             : `<p class="settings-note">Lagi males? Ambil satu tugas kecil, kerjakan 5 menit. Bonus 20 XP.</p><button class="primary-button" data-act="chal">Mulai tantangan</button>`}</section>
 
     <section class="card"><h2>Air minum</h2>${bar((r.w || 0) / 8 * 100)}
       <div class="gstats"><span>${r.w || 0} dari 8 gelas</span></div>
@@ -2878,9 +2781,7 @@ function renderGrowth() {
 
     <section class="card"><h2>Brain dump</h2>${notes}
       <div class="edit-row"><input id="noteText" type="text" maxlength="80" placeholder="Tuang isi kepala..."><button class="mini-button" data-act="note-add">Simpan</button></div></section>
-
-    <section class="card"><h2>Ekspor data</h2><p class="settings-note">Riwayat harian dan transaksi uang dalam format CSV.</p>
-      <button class="mini-button" data-act="csv">Unduh CSV</button></section>`;
+`;
 }
 
 function setupGrowth() {
@@ -2895,8 +2796,6 @@ function setupGrowth() {
     if (a === "water+") r.w = (r.w || 0) + 1;
     else if (a === "water-") r.w = Math.max(0, (r.w || 0) - 1);
     else if (a === "mood") r.mood = Number(b.dataset.v);
-    else if (a === "chal") { startChallenge(); return; }
-    else if (a === "csv") { exportCSV(); return; }
     else if (a === "cd-add") {
       const t = val("#cdTitle"), d = val("#cdDate");
       if (!t || !d) return;
@@ -2933,4 +2832,30 @@ function setupGrowth() {
     saveData();
     renderGrowth();
   });
+}
+
+/* =========================================================
+   THEO v2.3 — MENU INFO + POLISH
+========================================================= */
+
+function updateWidgetInfo() {
+  const set = (k, t) => document.querySelectorAll(`[data-info="${k}"]`).forEach(el => { el.textContent = t; });
+  const habitsDone = data.habits.filter(isHabitDone).length;
+  set("habits", data.habits.length ? `${habitsDone} dari ${data.habits.length} hari ini` : "Belum ada habit");
+  const avg = data.goals.length ? Math.round(data.goals.reduce((s, g) => s + Number(g.progress || 0), 0) / data.goals.length) : null;
+  set("goals", avg === null ? "Belum ada target" : `Rata-rata ${avg}%`);
+  const gd = data.groomingItems.filter(x => x.completed).length;
+  set("grooming", data.groomingItems.length ? `${gd} dari ${data.groomingItems.length} selesai` : "Belum ada rutinitas");
+  set("focus", timerInterval ? "Timer sedang berjalan" : "Timer dan saran aktivitas");
+  const xp = totalXP();
+  set("growth", `Level ${Math.floor(Math.sqrt(xp / 40)) + 1}, ${dayStreak()} hari beruntun`);
+}
+
+function setupPolish() {
+  ["habits", "goals", "grooming", "focus", "growth", "settings"].forEach(p => {
+    const box = document.querySelector(`#${p}Page .top-header > div`);
+    if (box) box.insertAdjacentHTML("afterbegin", '<button class="back-btn" data-page="widgets" type="button">‹ Menu</button>');
+  });
+  const csv = document.getElementById("exportCsvButton");
+  if (csv) csv.addEventListener("click", exportCSV);
 }

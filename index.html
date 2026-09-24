@@ -6,10 +6,10 @@
 
   <meta charset="UTF-8">
 
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="description" content="Aplikasi harian pribadi: jadwal, habit, fokus, dan uang.">
 
   <meta name="theme-color" content="#0D0E12">
 
@@ -17,7 +17,7 @@
 
   <link
     rel="stylesheet"
-    href="css/style.css?v=20260925a"
+    href="css/style.css?v=20260925b"
   >
 
 
@@ -845,319 +845,97 @@
 
 
 <section class="page" id="focusPage" hidden>
-
-      <section class="card holiday-card" id="holidayMode">
-        <div class="section-title">
-          <h2>Holiday Mode</h2>
-          <span id="holidayStatus">OFF</span>
-        </div>
-
-        <p>
-          Mode santai dengan target kecil supaya hari libur nggak
-          habis cuma buat rebahan.
-        </p>
-
-        <button
-          class="primary-button"
-          id="holidayToggle"
-          type="button"
-        >
-          Turn On
-        </button>
-      </section>
-
-
   <header class="top-header">
     <div>
-      <p class="greeting">Do something useful.</p>
+      <p class="greeting">Satu hal dalam satu waktu.</p>
       <h1>Focus</h1>
     </div>
   </header>
 
   <main class="content">
 
-    <section class="card">
-      <h2>What should I do now?</h2>
-
-      <p id="focusSuggestion">
-        Press the button and let THEO DAILY choose.
-      </p>
-
-      <button
-        class="primary-button"
-        id="suggestActivityButton"
-        type="button"
-      >
-        Choose activity
-      </button>
-    </section>
-
-    <section class="section">
-      <div class="section-title">
-        <h2>Energy</h2>
-      </div>
-
-      <div class="energy-grid">
-
-        <button class="energy-button" data-energy="low" type="button">
-          Low
-        </button>
-
-        <button class="energy-button" data-energy="normal" type="button">
-          Normal
-        </button>
-
-        <button class="energy-button" data-energy="high" type="button">
-          High
-        </button>
-
-      </div>
-    </section>
-
-    <section class="card">
-      <h2>Minimum Day</h2>
-
-      <p>
-        Kalau hari ini lagi berantakan, cukup selesaikan
-        beberapa hal dasar.
-      </p>
-
-      <button
-        class="primary-button minimum-day-trigger"
-        id="minimumDayButtonFocus"
-        type="button"
-      >
-        Start Minimum Day
-      </button>
-    </section>
-
-  </main>
-</section>
-
-
-<section class="page" id="backupPage" hidden>
-  <header class="top-header">
-    <div>
-      <p class="greeting">Keep your data safe.</p>
-      <h1>Backup</h1>
-    </div>
-  </header>
-
-  <main class="content">
-
-    <section class="card">
-      <h2>Backup data</h2>
-
-      <p>
-        Simpan semua data THEO DAILY ke file JSON.
-      </p>
-
-      <button
-        class="primary-button"
-        id="exportDataButton"
-        type="button"
-      >
-        Export Data
-      </button>
-    </section>
-
-    <section class="card">
-      <h2>Restore data</h2>
-
-      <p>
-        Masukkan kembali file backup JSON.
-      </p>
-
-      <input
-        id="importDataInput"
-        type="file"
-        accept=".json,application/json"
-      >
-
-
-
-    </section>
-
-  </main>
-</section>
-
-
-<section class="page" id="reviewPage" hidden>
-  <header class="top-header">
-    <div>
-      <p class="greeting">Check your day.</p>
-      <h1>Daily Review</h1>
-    </div>
-  </header>
-
-  <main class="content">
-
-    <section class="card">
-      <h2>Today's progress</h2>
-      <p id="reviewProgress">
-        Loading...
-      </p>
-    </section>
-
-    <section class="card">
-      <h2>How was today?</h2>
-
-      <div class="energy-grid">
-        <button class="review-mood" data-mood="bad" type="button">😕</button>
-        <button class="review-mood" data-mood="okay" type="button">😐</button>
-        <button class="review-mood" data-mood="good" type="button">🙂</button>
-      </div>
-    </section>
-
-    <section class="card">
-      <h2>Note</h2>
-
-      <textarea
-        id="reviewNote"
-        rows="5"
-        placeholder="Tulis sedikit tentang hari ini..."
-      ></textarea>
-
-      <button
-        class="primary-button"
-        id="saveReviewButton"
-        type="button"
-      >
-        Save Review
-      </button>
-    </section>
-
-  </main>
-</section>
-
-
-<section class="page" id="timerPage" hidden>
-  <header class="top-header">
-    <div>
-      <p class="greeting">One thing at a time.</p>
-      <h1>Focus Timer</h1>
-    </div>
-  </header>
-
-  <main class="content">
-
     <section class="card timer-card">
-
-      <div id="timerDisplay" class="timer-display">
-        25:00
-      </div>
-
+      <h2>Timer fokus</h2>
+      <div id="timerDisplay" class="timer-display">25:00</div>
       <div class="timer-controls">
-
-        <button
-          class="primary-button"
-          id="timerStart"
-          type="button"
-        >
-          Start
-        </button>
-
-        <button
-          class="secondary-button"
-          id="timerPause"
-          type="button"
-        >
-          Pause
-        </button>
-
-        <button
-          class="secondary-button"
-          id="timerReset"
-          type="button"
-        >
-          Reset
-        </button>
-
+        <button class="primary-button" id="timerStart" type="button">Mulai</button>
+        <button class="secondary-button" id="timerPause" type="button">Jeda</button>
+        <button class="secondary-button" id="timerReset" type="button">Reset</button>
       </div>
-
+      <select id="timerDuration" aria-label="Durasi sesi">
+        <option value="15">15 menit</option>
+        <option value="25" selected>25 menit</option>
+        <option value="45">45 menit</option>
+        <option value="60">60 menit</option>
+      </select>
+      <p class="settings-note">Sesi yang selesai memberi bonus 20 XP.</p>
     </section>
 
     <section class="card">
+      <h2>Mau ngapain sekarang?</h2>
+      <p id="focusSuggestion">Tekan tombol, biar THEO yang pilih.</p>
+      <div class="energy-grid">
+        <button class="energy-button" data-energy="low" type="button">Low</button>
+        <button class="energy-button active" data-energy="normal" type="button">Normal</button>
+        <button class="energy-button" data-energy="high" type="button">High</button>
+      </div>
+      <button class="primary-button" id="suggestActivityButton" type="button">Pilih aktivitas</button>
+    </section>
 
-      <h2>Session</h2>
-
-      <select id="timerDuration">
-        <option value="15">15 minutes</option>
-        <option value="25" selected>25 minutes</option>
-        <option value="45">45 minutes</option>
-        <option value="60">60 minutes</option>
-      </select>
-
+    <section class="card holiday-card" id="holidayMode">
+      <div class="section-title">
+        <h2>Holiday Mode</h2>
+        <span id="holidayStatus">OFF</span>
+      </div>
+      <p>Mode santai: target kecil dan tanpa notifikasi jadwal.</p>
+      <button class="primary-button" id="holidayToggle" type="button">Turn On</button>
     </section>
 
   </main>
 </section>
 
-
-<section class="page" id="widgetsPage" data-page-section="widgets" hidden>
-  <div class="page-header">
+<section class="page" id="widgetsPage" hidden>
+  <header class="top-header">
     <div>
-      <span class="eyebrow">TOOLS</span>
-      <h1>Widgets</h1>
-      <p>Quick access to your daily tools.</p>
+      <p class="greeting">Semua alatmu di satu tempat.</p>
+      <h1>Menu</h1>
     </div>
-  </div>
+  </header>
 
-  <div class="widgets-grid">
-    <button class="widget-card" data-page="habits" type="button">
-      <span class="material-symbols-sharp">check_circle</span>
-      <strong>Habits</strong>
-      <small>Track your routines</small>
-    </button>
-
-    <button class="widget-card" data-page="goals" type="button">
-      <span class="material-symbols-sharp">flag</span>
-      <strong>Goals</strong>
-      <small>Keep your targets visible</small>
-    </button>
-
-    <button class="widget-card" data-page="grooming" type="button">
-      <span class="material-symbols-sharp">face</span>
-      <strong>Grooming</strong>
-      <small>Personal care routine</small>
-    </button>
-
-    <button class="widget-card" data-page="focus" type="button">
-      <span class="material-symbols-sharp">center_focus_strong</span>
-      <strong>Focus Mode</strong>
-      <small>Cut the distractions</small>
-    </button>
-
-    <button class="widget-card" data-page="timer" type="button">
-      <span class="material-symbols-sharp">timer</span>
-      <strong>Timer</strong>
-      <small>Simple countdown</small>
-    </button>
-
-    <button class="widget-card" data-page="review" type="button">
-      <span class="material-symbols-sharp">rate_review</span>
-      <strong>Review</strong>
-      <small>Reflect on your day</small>
-    </button>
-
-    <button class="widget-card" data-page="backup" type="button">
-      <span class="material-symbols-sharp">backup</span>
-      <strong>Backup</strong>
-      <small>Protect your data</small>
-    </button>
-
-    <button class="widget-card" data-page="settings" type="button">
-      <span class="material-symbols-sharp">tune</span>
-      <strong>Settings</strong>
-      <small>Nama, warna, isi bawaan</small>
-    </button>
-
-    <button class="widget-card" data-page="growth" type="button">
-      <span class="material-symbols-sharp">trending_up</span>
-      <strong>Growth</strong>
-      <small>Level, mood, target</small>
-    </button>
-  </div>
+  <main class="content">
+    <div class="widgets-grid">
+      <button class="widget-card" data-page="habits" type="button">
+        <span class="material-symbols-sharp">check_circle</span>
+        <strong>Habits</strong>
+        <small data-info="habits">Rutinitas harian</small>
+      </button>
+      <button class="widget-card" data-page="goals" type="button">
+        <span class="material-symbols-sharp">flag</span>
+        <strong>Goals</strong>
+        <small data-info="goals">Target jangka panjang</small>
+      </button>
+      <button class="widget-card" data-page="grooming" type="button">
+        <span class="material-symbols-sharp">face</span>
+        <strong>Grooming</strong>
+        <small data-info="grooming">Perawatan diri</small>
+      </button>
+      <button class="widget-card" data-page="focus" type="button">
+        <span class="material-symbols-sharp">center_focus_strong</span>
+        <strong>Focus</strong>
+        <small data-info="focus">Timer dan saran aktivitas</small>
+      </button>
+      <button class="widget-card" data-page="growth" type="button">
+        <span class="material-symbols-sharp">trending_up</span>
+        <strong>Growth</strong>
+        <small data-info="growth">Level, mood, target</small>
+      </button>
+      <button class="widget-card" data-page="settings" type="button">
+        <span class="material-symbols-sharp">tune</span>
+        <strong>Settings</strong>
+        <small data-info="settings">Nama, warna, cadangan data</small>
+      </button>
+    </div>
+  </main>
 </section>
 
 <section class="page" id="growthPage" hidden>
@@ -1214,6 +992,17 @@
     </section>
 
     <section class="card">
+      <h2>Cadangan data</h2>
+      <p class="settings-note">Simpan semua data ke file, atau pulihkan dari file cadangan.</p>
+      <div class="edit-row">
+        <button class="mini-button" id="exportDataButton" type="button">Unduh backup</button>
+        <label class="mini-button" for="importDataInput">Pulihkan</label>
+        <input id="importDataInput" type="file" accept="application/json,.json" hidden>
+        <button class="mini-button" id="exportCsvButton" type="button">Unduh CSV</button>
+      </div>
+    </section>
+
+    <section class="card">
       <h2>Data</h2>
       <p class="settings-note">Buat cadangan dulu lewat Widgets → Backup.</p>
       <p class="settings-note">Versi app: <span id="appVersion">lama (JS belum ter-update)</span></p>
@@ -1246,19 +1035,25 @@
   </button>
 
   <button class="nav-item" data-page="widgets" type="button">
-    <span class="material-symbols-sharp">widgets</span>
-    <span>Widgets</span>
+    <span class="material-symbols-sharp">apps</span>
+    <span>Menu</span>
   </button>
 </nav>
 
 
   
 <section class="page" id="groomingPage" hidden>
+  <header class="top-header">
+    <div>
+      <p class="greeting">Rawat diri, mulai dari hal kecil.</p>
+      <h1>Grooming</h1>
+    </div>
+  </header>
 
   <main class="content">
 
     <div class="section-title">
-      <h2>Grooming</h2>
+      <h2>Rutinitas hari ini</h2>
     </div>
 
     <form id="groomingForm" class="schedule-form">
@@ -1331,7 +1126,7 @@
 </div>
 
 
-<script src="js/app.js?v=20260925a"></script>
+<script src="js/app.js?v=20260925b"></script>
 <script>
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {

@@ -4243,3 +4243,23 @@ label.mini-button { display: inline-block; }
 .confetti { position: fixed; top: -14px; width: 9px; height: 14px; border-radius: 2px; z-index: 999; pointer-events: none; animation: confetti-fall 2.2s ease-in forwards; }
 @keyframes confetti-fall { to { transform: translateY(108vh) rotate(540deg); } }
 @media (prefers-reduced-motion: reduce) { .confetti { display: none; } }
+
+/* === THEO v2.3: MENU + BACK === */
+.widgets-grid { display: grid !important; grid-template-columns: 1fr 1fr !important; gap: 12px !important; }
+.widget-card {
+  display: flex !important; flex-direction: column !important; align-items: flex-start !important;
+  gap: 6px !important; min-height: 124px; padding: 16px !important; text-align: left !important;
+}
+.widget-card .material-symbols-sharp {
+  width: 40px; height: 40px; border-radius: 12px; margin-bottom: 4px;
+  display: flex !important; align-items: center; justify-content: center;
+  background: rgba(var(--accent-rgb), .14) !important; color: var(--accent) !important; font-size: 22px !important;
+}
+.widget-card small { color: var(--muted) !important; font-size: 12px !important; line-height: 1.35; }
+.back-btn {
+  display: inline-flex; align-items: center; margin-bottom: 10px; padding: 6px 12px;
+  border-radius: 99px; border: 1px solid var(--border); background: transparent;
+  color: var(--muted); font: 600 13px "Inter", sans-serif; cursor: pointer;
+}
+.back-btn:active { color: var(--accent); border-color: var(--accent); }
+.timer-card select { width: 100%; margin-top: 14px; }
